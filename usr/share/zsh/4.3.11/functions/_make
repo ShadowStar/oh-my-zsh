@@ -174,6 +174,7 @@ elif [[ "$prev" == -[foW] ]]
 then
   _files -W ${(q)$(findBasedir $words)}
 else
+  local basedir tg
   file="$words[(I)-f]"
   if (( file ))
   then
@@ -181,7 +182,6 @@ else
     [[ $file == [^/]* ]] && file=${(q)$(findBasedir $words)}/$file
     [[ -r $file ]] || file=
   else
-    local basedir
     basedir=${(q)$(findBasedir $words)}
     if [[ $is_gnu == gnu && -r $basedir/GNUmakefile ]]
     then
@@ -196,30 +196,32 @@ else
       file=''
     fi
   fi
-  local tg
   if [[ -n "$file" ]]
   then
     if [[ $is_gnu == gnu ]] && zstyle -t ":completion:${curcontext}:targets" call-command
     then
-      parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp --no-print-directory -f "$file" .PHONY 2> /dev/null)
+      basedir=`dirname $file`
+      file=`basename $file`
+      parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp --no-print-directory -C "$basedir" -f "$file" .PHONY 2> /dev/null)
     else
       case "$OSTYPE" in
         freebsd*)
-        parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp -f "$file" .PHONY 2> /dev/null)
+        basedir=`dirname $file`
+        file=`basename $file`
+        parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp -C "$basedir" -f "$file" .PHONY 2> /dev/null)
 	;;
 	*)
         parseMakefile $PWD < $file
+        basedir=`dirname $file`
+        file=`basename $file`
       esac
     fi
-    for tg in `make -f $file -qp 2>/dev/null | awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ {split($1,A,/ /);for(i in A)print A[i]}'`
+    for tg in `make -C $basedir -f $file -qp 2>/dev/null | gsed -e '/^[\s]*#/d' | gsed -nE '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/{N;/:.*\S+.*$/P}' | gsed -e 's/:.*//'`
     do
       TARGETS[$tg]=''
     done
   fi
-  for tg in `make -qp 2>/dev/null | awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ {split($1,A,/ /);for(i in A)print A[i]}'`
-  do
-    TARGETS[$tg]=''
-  done
+
   if [[ $PREFIX == *'='* ]]
   then
     # Complete make variable as if shell variable
