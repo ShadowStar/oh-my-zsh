@@ -712,6 +712,8 @@ _git-remote () {
         'prune:delete all stale tracking branches for a given remote'
         'update:fetch updates for a set of remotes'
         'rm:remove a remote from .git/config and all associated tracking branches'
+        'set-head:sets or deletes the default branch for the named remote'
+        'set-url:changes URL remote points to'
         'rename:rename a remote from .git/config and update all associated tracking branches')
 
       _describe -t commands 'sub-command' commands && ret=0
@@ -741,6 +743,21 @@ _git-remote () {
           ;;
         (rm)
           __git_remotes && ret=0
+          ;;
+        (set-head)
+          _arguments \
+            '-a[the remote is queried to determine its HEAD, then the symbolic-ref refs/remotes/<name>/HEAD is set to the same branch]' \
+            '-d[the symbolic ref refs/remotes/<name>/HEAD is deleted]' \
+            ':remote:__git_remotes' \
+            ':branch:__git_branch_names' && ret=0
+          ;;
+        (set-url)
+          _arguments \
+            '--push[push URLs are manipulated instead of fetch URLs]' \
+            '--add[instead of changing some URL, new URL is added]' \
+            '--delete[instead of changing some URL, all URLs matching regex <url> are deleted]' \
+            ':remote:__git_remotes'\
+            ':url:_urls' && ret=0
           ;;
         (rename)
           __git_remotes && ret=0
@@ -2883,8 +2900,8 @@ __git_files_relative () {
 
     # If prefix still not empty, ascend up.
     while (( $#p_parts > 0 )); do
-	tmp+=..
-	p_parts[1]=()
+      tmp+=..
+      p_parts[1]=()
     done
 
     # Add remaining path.
@@ -3049,9 +3066,9 @@ _remote_files () {
     while _tags; do
       while _next_label files expl ${suf:-remote directory}; do
 #        [[ -n $suf ]] && compadd "$@" "$expl[@]" -d remdispf \
-#	    ${(q)remdispf%[*=@|]} && ret=0
-	compadd ${suf:+-S/} "$@" "$expl[@]" -d remdispd \
-	    ${(q)remdispd%/} && ret=0
+#          ${(q)remdispf%[*=@|]} && ret=0
+        compadd ${suf:+-S/} "$@" "$expl[@]" -d remdispd \
+            ${(q)remdispd%/} && ret=0
       done
       (( ret )) || return 0
     done
@@ -3375,6 +3392,7 @@ __git_config_name () {
       'pack.window:size of window used by git-pack-objects'
       'pull.octopus:default merge strategy to use when pulling multiple branches'
       'pull.twohead:default merge strategy to use when pulling a single branch'
+      'push.default:defines the action git push should take if no refspec is given'
       'repack.usedeltabaseoffset:whether to allow git-repack to use delta-base offsets'
       'show.difftree:default git-diff-tree options for git-show'
       'showbranch.default:default set of branches for git-show-branch'
@@ -3851,6 +3869,18 @@ __git_config_values () {
       ;;
     ((#i)pull.(octopus|twohead))
       __git_merge_strategies
+      ;;
+    ((#i)push.default)
+      declare -a modes
+
+      modes=(
+        'nothing:do not push anything' \
+        'matching:push all matching branches' \
+        'upstream:push the current branch to its upstream branch' \
+        'tracking:deprecated synonym for upstream' \
+        'current:push the current branch to a branch of the same name')
+
+      _describe -t crlfmode 'push mode' modes
       ;;
     ((#i)remote.*.url)
       _urls
@@ -4510,11 +4540,11 @@ if [[ $service == git ]]; then
         __git_aliases_and_commands
       else
         curcontext="${curcontext%:*:*}:git-$words[1]:"
-	if (( $+functions[_git-$words[1]] )); then
+        if (( $+functions[_git-$words[1]] )); then
           _call_function ret _git-$words[1]
-	else
-	  _files
-	fi
+        else
+          _files
+        fi
         return ret
       fi
       ;;
