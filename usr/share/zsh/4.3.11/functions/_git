@@ -493,6 +493,75 @@ _git-hash-object () {
     '(--stdin):file:_files' && ret=0
 }
 
+_git_users () {
+  _combination -s '[:@]' my-accounts users-hosts users "$@"
+}
+
+_git_ssh_urls() {
+  if [[ -prefix *:// ]]
+  then
+    if zstyle -T ":completion:${curcontext}:files" remote-access
+    then
+      local host=${PREFIX%%/*}
+      typeset -a remdirs
+      compset -p $(( $#host + 1 ))
+      local rempath=${(M)PREFIX##*/}
+      local cacheid="git:${host}-${rempath//\//_}"
+      cacheid=${cacheid%[-_]}
+      compset -P '*/'
+      if _cache_invalid "$cacheid" || ! _retrieve_cache "$cacheid"
+      then
+        remdirs=(${${(M)${(f)"$(_call_program files ssh -a -x $host ls -1FL "${(q)rempath}" 2> /dev/null)"}##*/}%/})
+        _store_cache "$cacheid" remdirs
+      fi
+      _describe -t directories 'remote directory' remdirs -S/
+    else
+      _message 'remote directory'
+    fi
+
+    if compset -P '*@'
+    then
+      _hosts -S/
+    else
+      _alternative  'users:user:_users -S@' \
+        'hosts:remote host name:_hosts -S/'
+    fi
+  else
+    if compset -P '*@'
+    then
+      _hosts -S:
+    else
+      _alternative 'hosts:remote host name:_hosts -S:'
+    fi
+  fi
+}
+
+(( $+functions[_git_urls] )) ||
+_git_urls () {
+  if compset -P 'file:///'
+  then
+    _path_files -/ -W /
+  elif [[ -prefix ssh:// ]]
+  then
+    _git_ssh_urls
+  elif [[ -prefix git:// ]]
+  then
+    _git_ssh_urls
+  elif [[ -prefix *@ ]]
+  then
+    _git_ssh_urls
+  elif [[ -prefix *:// ]]
+  then
+    _urls
+  else
+    local expl
+    compset -S '[^:]*'
+    _wanted url-schemas expl 'URL schema' compadd -S '' - \
+      http:// https:// ssh:// git:// file:/// git@
+    _wanted users expl 'user to log in as' _git_users -S@
+  fi
+}
+
 (( $+functions[_git-help] )) ||
 _git-help () {
   _arguments -S \
@@ -2786,6 +2855,84 @@ _git-mergetool () {
     '*:conflicted file:_files' && ret=0
 }
 
+(( $+functions[_git-submodule] )) ||
+_git-submodule () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+
+  _arguments -C \
+    '(- :)--help[display help message]' \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+
+  case $state in
+    (command)
+      declare -a commands
+
+      commands=(
+        'add:add the given repository as a submodule at the given path'
+        'init:initialize the submodules'
+        'status:show the status of the submodules'
+        'update:update the registered submodules'
+        'summary:Show commit summary between the given commit (defaults to HEAD) and working tree/index'
+        'foreach:evaluates an arbitrary shell command in each checked out submodule'
+        'sync:Synchronizes submodules'\''s remote URL configuration setting to the value specified in .gitmodules')
+        _describe -t commands 'git-submodule' commands && ret=0
+      ;;
+    (options)
+      declare -a arguments
+
+      arguments+=('(-q --quiet)'{-q,--quiet}'[only print error messages]')
+
+      if [[ $line[1] == (status|summary) ]]; then
+        arguments+=(
+          '--cached[the commit stored in the index is used instead of HEAD]')
+      fi
+
+      if [[ $line[1] == (foreach|update|status) ]]; then
+        arguments+=(
+          '--recursive[traverse submodules recursively]')
+      fi
+
+      case $line[1] in
+        (add)
+          arguments+=(
+            '(-b --branch)'{-b,--branch}'[branch of repository to add as submodule]:branches:__git_branch_names'
+            '(-f --force)'{-f,--force}'[allow adding an otherwise ignored submodule path]'
+            ':url:_git_urls'
+            '::directory:_directories')
+          ;;
+        (status|init|sync)
+          arguments+=(':directories:_directories')
+          ;;
+        (update)
+          arguments+=(
+            '--init[initialize all submodules that not initialized before updating]'
+            '(-N --no-fetch)'{-N,--no-fetch}'[don'\''t fetch new objects from the remote site]'
+            '(-f --force)'{-f,--force}'[throw away local changes in submodules when switching to a different commit]'
+            '--rebase[rebase the current branch onto the commit recorded in the superproject]'
+            '--merge[merge the commit recorded in the superproject into the current branch of the submodule]'
+            ':directories:_directories')
+          ;;
+        (summary)
+          arguments+=(
+            '--files[compares the commit in the index with that in the submodule HEAD]'
+            '(-n --summary-limit)'{-n,--summary-limit}'[limit the number of commits shown in total. Giving 0 will disable; a negative number means unlimited]: :_guard "[[\:digit\:]]#" number'
+            '::commits:__git_commits2'
+            '::directories:_directories')
+          ;;
+        (foreach)
+          arguments+=(
+            ':shell cmd:_path_commands')
+          ;;
+      esac
+
+      _arguments -C \
+        '(-h -H --help)'{-h,-H,--help}'[display usage information]' \
+        $arguments && ret=0
+      ;;
+  esac
+}
 # ---
 
 (( $+functions[__git_guard] )) ||
