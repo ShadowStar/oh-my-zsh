@@ -497,7 +497,7 @@ _git_users () {
   _combination -s '[:@]' my-accounts users-hosts users "$@"
 }
 
-_git_ssh_urls() {
+_git_host_urls () {
   if [[ -prefix *:// ]]
   then
     if zstyle -T ":completion:${curcontext}:files" remote-access
@@ -543,13 +543,13 @@ _git_urls () {
     _path_files -/ -W /
   elif [[ -prefix ssh:// ]]
   then
-    _git_ssh_urls
+    _git_host_urls
   elif [[ -prefix git:// ]]
   then
-    _git_ssh_urls
+    _git_host_urls
   elif [[ -prefix *@ ]]
   then
-    _git_ssh_urls
+    _git_host_urls
   elif [[ -prefix *:// ]]
   then
     _urls
@@ -558,7 +558,26 @@ _git_urls () {
     compset -S '[^:]*'
     _wanted url-schemas expl 'URL schema' compadd -S '' - \
       http:// https:// ssh:// git:// file:/// git@
-    _wanted users expl 'user to log in as' _git_users -S@
+    _wanted users expl 'user to log in as' _users -S@
+  fi
+}
+
+(( $+functions[_git_svn_urls] )) ||
+_git_svn_urls () {
+  if compset -P 'file:///'
+  then
+    _path_files -/ -W /
+  elif [[ -prefix svn:// ]]
+  then
+    _git_host_urls
+  elif [[ -prefix *:// ]]
+  then
+    _urls
+  else
+    local expl
+    compset -S '[^:]*'
+    _wanted url-schemas expl 'SVN URL' compadd -S '' - \
+      http:// https:// svn:// file:///
   fi
 }
 
@@ -795,7 +814,7 @@ _git-remote () {
             '(--master -m)'{--master,-m}'[set the remote'\''s HEAD to point to given master branch]:branch:__git_branch_names' \
             '(--fetch -f)'{--fetch,-f}'[run git-fetch on the new remote after it has been created]' \
             ':branch name:__git_remotes' \
-            ':url:_urls' && ret=0
+            ':url:_git_urls' && ret=0
           ;;
         (show)
           _arguments \
@@ -826,7 +845,7 @@ _git-remote () {
             '--add[instead of changing some URL, new URL is added]' \
             '--delete[instead of changing some URL, all URLs matching regex <url> are deleted]' \
             ':remote:__git_remotes'\
-            ':url:_urls' && ret=0
+            ':url:_git_urls' && ret=0
           ;;
         (rename)
           __git_remotes && ret=0
@@ -1453,7 +1472,7 @@ _git-ssh-fetch () {
   _arguments \
     $fetch_args \
     ':commit id:__git_commits' \
-    ':URL:_urls' && ret=0
+    ':URL:_git_urls' && ret=0
 }
 
 (( $+functions[_git-ssh-upload] )) ||
@@ -1461,7 +1480,7 @@ _git-ssh-upload () {
   _arguments \
     $fetch_args \
     ':commit id:__git_commits' \
-    ':URL:_urls' && ret=0
+    ':URL:_git_urls' && ret=0
 }
 
 (( $+functions[_git-update-server-info] )) ||
@@ -2412,7 +2431,7 @@ _git-svnimport () {
     '-R[specify how often git repository should be repacked]: :_guard "[[\:digit\:]]#" "number of revisions"' \
     '-P[import only given path of the SVN tree]::_directory' \
     $verbose_arg \
-    ':svn-repositry-url:_urls' \
+    ':svn-repositry-url:_git_svn_urls' \
     '::directory:_directories' && ret=0
 }
 
@@ -2566,7 +2585,7 @@ _git-patch-id () {
 _git-request-pull () {
   _arguments \
     ':start commit:__git_commits' \
-    ':url:_urls' \
+    ':url:_git_urls' \
     '::end commit:__git_commits'
 }
 
@@ -2767,7 +2786,7 @@ _git-svn () {
       case $line[1] in
         (clone)
           arguments+=(
-            ':url:_urls'
+            ':url:_git_svn_urls'
             '::directory:_directories')
           ;;
         (set-tree)
@@ -2833,7 +2852,7 @@ _git-svn () {
         (subdirectory)
           _alternative \
             'sub-directories:sub-directory:_directories' \
-            'urls: :_urls' && ret=0
+            'urls: :_git_svn_urls' && ret=0
           ;;
       esac
       ;;
@@ -4030,7 +4049,7 @@ __git_config_values () {
       _describe -t crlfmode 'push mode' modes
       ;;
     ((#i)remote.*.url)
-      _urls
+      _git_urls
       ;;
     ((#i)remote.*.fetch)
       : TODO
@@ -4224,7 +4243,7 @@ __git_config_values () {
     ((#i)svn.(trunk|tags|branches))
       _alternative \
         'sub-directories:sub-directory:_directories' \
-        'urls: :_urls' && ret=0
+        'urls: :_git_svn_urls' && ret=0
       ;;
     ((#i)svn.prefix)
       _message -e 'prefix'
