@@ -60,6 +60,7 @@ export TERM=xterm-color
 
 #setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
