@@ -153,6 +153,7 @@ common_fetch_args=(
 )
 
 common_apply_args=(
+  '--ignore-whitespace[ignore changes in whitespace in context lines if necessary]'
   '--whitespace=-[detect a new or modified line that ends with trailing whitespaces]: :__git_apply_whitespace_strategies'
   '-p-[remove N leading slashes from traditional diff paths]: :_guard  "[[\:digit\:]]#" number'
   '-C-[ensure at least N lines of context match before and after each change]: :_guard  "[[\:digit\:]]#" number')
@@ -4457,7 +4458,7 @@ __git_apply_whitespace_strategies () {
     'warn:output trailing-whitespace warning, but apply patch'
     'error:output trailing-whitespace warning and refuse to apply patch'
     'error-all:same as "error", but output warnings for all files'
-    'strip:output trailing-whitespace warning and strip trailing whitespace')
+    'fix:outputs warnings for a few such errors, and applies the patch after fixing them')
 
   _describe -t strategies 'trailing-whitespace resolution strategy' strategies
 }
