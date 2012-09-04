@@ -1703,7 +1703,7 @@ _git-branch () {
       '-f[force the creation of a new branch]' \
       '--track[set up configuration so pull merges from the start point]' \
       '--no-track[override the branch.autosetupmerge configuration variable]' \
-      '--contains=[only list branches which contain the specified commit]:commit:__git_committishs' \
+      '--contains[only list branches which contain the specified commit]:commit:__git_committishs' \
       '--merged[only list branches which are fully contained by HEAD]' \
       '--no-merged[do not list branches which are fully contained by HEAD]' \
       '--set-upstream[set the start point of branch]' \
@@ -2463,7 +2463,7 @@ _git-tag () {
       '(-a -s   )-u[create a tag, annotated and signed with the given key]:secret key:__git_gpg_secret_keys' \
       '(   -v)-f[create a new tag even if one with the same name already exists]' \
       '(-f   )-v[verifies the gpg signutare of the given tag]' \
-      '--contains=[only list tags which contain the specified commit]:commit:__git_committishs' \
+      '--contains[only list tags which contain the specified commit]:commit:__git_committishs' \
       $message_args \
       ':tag name:__git_tags' \
       '::head:__git_revisions' \
