@@ -32,7 +32,7 @@ CASE_SENSITIVE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git svn)
+plugins=(make git svn)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -60,10 +60,11 @@ export TERM=xterm-color
 
 #setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
-setopt MENU_COMPLETE
+#setopt MENU_COMPLETE
 
 #export LSCOLORS=Exfxcxdxbxegedabagacad
 unset LSCOLORS
