@@ -46,17 +46,23 @@ alias ls="ls -G -F"
 alias lh="ls -lh"
 alias grep="grep --colour=auto"
 
-alias pkginfo="pkgutil -v --pkg-info"
-alias pkgf="pkgutil -v --files"
-alias pkgfinfo="pkgutil -v --file-info"
-alias pkgs="pkgutil -v --pkgs"
-
-export PAGER=/opt/bin/vimpager
 export PATH=$PATH:/opt/bin:/opt/toolchain/bin:/opt/toolchain/sbin
-export GNUPATH=/opt/gnu/bin
+
+if [[ "`uname -s`" = "Darwin" ]]; then
+	export GNUPATH=/opt/gnu/bin
+	alias pkginfo="pkgutil -v --pkg-info"
+	alias pkgf="pkgutil -v --files"
+	alias pkgfinfo="pkgutil -v --file-info"
+	alias pkgs="pkgutil -v --pkgs"
+fi
+
 export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 export TERM=xterm-color
+
+if $(which vimpager >/dev/null); then
+	export PAGER="$(which vimpager)"
+fi
 
 #setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
