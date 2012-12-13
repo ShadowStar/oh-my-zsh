@@ -58,7 +58,7 @@ fi
 
 export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
-export TERM=xterm-color
+#export TERM=xterm-color
 
 if $(which vimpager >/dev/null); then
 	export PAGER="$(which vimpager)"
@@ -70,7 +70,7 @@ setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
-#setopt MENU_COMPLETE
+setopt MENU_COMPLETE
 
 #export LSCOLORS=Exfxcxdxbxegedabagacad
 unset LSCOLORS
