@@ -42,9 +42,9 @@ alias mv='mv -i'
 alias cp='cp -i'
 alias la="ls -a"
 alias ll="ls -l"
-alias ls="ls -G -F"
+alias lla="ls -la"
 alias lh="ls -lh"
-alias grep="grep --colour=auto"
+alias grep="grep --color=auto"
 
 export PATH=$PATH:/opt/bin:/opt/toolchain/bin:/opt/toolchain/sbin
 
@@ -54,6 +54,9 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgf="pkgutil -v --files"
 	alias pkgfinfo="pkgutil -v --file-info"
 	alias pkgs="pkgutil -v --pkgs"
+	alias ls="ls -G -F"
+elif [[ "`uname -s`" = "Linux" ]]; then
+	alias ls="ls --color=auto -F"
 fi
 
 export LANG="zh_CN.UTF-8"
