@@ -46,9 +46,8 @@ alias lla="ls -la"
 alias lh="ls -lh"
 alias grep="grep --color=auto"
 
-export PATH=$PATH:/opt/bin:/opt/toolchain/bin:/opt/toolchain/sbin
-
 if [[ "`uname -s`" = "Darwin" ]]; then
+	export PATH=$PATH:/opt/bin:/opt/toolchain/bin:/opt/toolchain/sbin
 	export GNUPATH=/opt/gnu/bin
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
@@ -56,6 +55,9 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgs="pkgutil -v --pkgs"
 	alias ls="ls -G -F"
 elif [[ "`uname -s`" = "Linux" ]]; then
+	which gsed >/dev/null || which gnused >/dev/null && alias gsed="gnused" || alias gsed="sed"
+	which gawk >/dev/null || which gnuawk >/dev/null && alias gawk="gnuawk" || alias gawk="awk"
+	which exuberant-ctags >/dev/null || which ctags-exuberant >/dev/null && alias exuberant-ctags="ctags-exuberant" || alias exuberant-ctags="ctags"
 	alias ls="ls --color=auto -F"
 fi
 
