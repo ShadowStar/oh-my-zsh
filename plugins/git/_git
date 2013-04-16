@@ -3570,7 +3570,10 @@ __git_config_name () {
       'user.signingkey:default GPG key to use when creating signed tags'
       'whatchanged.difftree:default git-diff-tree arguments for git-whatchanged'
       'receive.unpackLimit:maximum number of objects to unpack when pushing'
-      'receive.denyNonFastforwards:whether git-receive-pack denies ref updates which are not fast-forwards'
+      'receive.denyNonFastForwards:whether git-receive-pack denies ref updates that isn'\''t fast-forwards'
+      'receive.denyDeletes:whether git-receive-pack denies ref updates that deletes the ref'
+      'receive.denyDeleteCurrent:whether git-receive-pack denies ref updates that deletes the currently checked out branch of a non-bare repository'
+      'receive.denyCurrentBranch:whether git-receive-pack denies ref updates to the currently checked out branch of a non-bare repository'
       'transfer.unpackLimit:default value for fetch.unpackLimit and receive.unpackLimit'
       'imap.Folder:IMAP folder to use with git-imap-send'
       'imap.Tunnel:tunneling command to use for git-imap-send'
@@ -4131,12 +4134,40 @@ __git_config_values () {
       # TODO: This should complete the options available to git-diff-tree.
       _message 'default options to git-diff-tree when invoking git-whatchanged'
       ;;
+    ((#i)receive.denyDeletes)
+      declare -a booleans
+
+      booleans=(
+        'true:deny the ref updates that deletes the ref.'
+        'false:allow the ref updates that deletes the ref.')
+
+      _describe -t booleans 'boolean' booleans
+      ;;
+    ((#i)receive.denyDeleteCurrent)
+      declare -a booleans
+
+      booleans=(
+        'true:deny the ref updates that deletes the currently checked out branch of a non-bare repository.'
+        'false:allow the ref updates that deletes the currently checked out branch of a non-bare repository.')
+
+      _describe -t booleans 'boolean' booleans
+      ;;
+    ((#i)receive.denyCurrentBranch)
+      declare -a values
+
+      values=(
+        {true,refuse}':deny the ref updates to the currently checked out branch of a non-bare repository.'
+        {false,ignore}':allow the ref updates to the currently checked out branch of a non-bare repository.'
+	'warn:print a warning of such a push to stderr, but allow the push.')
+
+      _describe -t values 'value' values
+      ;;
     ((#i)receive.denyNonFastForwards)
       declare -a booleans
 
       booleans=(
-        {true,yes}':git-receive-pack will deny a ref update that isn'\''t a fast forward'
-        {false,no}':allow a ref update that isn'\''t a fast forward')
+        'true:deny the ref updates that isn'\''t a fast forward'
+        'false:allow the ref updates that isn'\''t a fast forward')
 
       _describe -t booleans 'boolean' booleans
       ;;
