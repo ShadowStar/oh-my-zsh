@@ -47,7 +47,7 @@ alias lh="ls -lh"
 alias grep="grep --color=auto"
 
 if [[ "`uname -s`" = "Darwin" ]]; then
-	export PATH=$PATH:/opt/bin:/opt/toolchain/bin:/opt/toolchain/sbin
+	export PATH=$PATH:/opt/bin:/opt/toolchain/bin
 	export GNUPATH=/opt/gnu/bin
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
@@ -76,6 +76,7 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
 setopt MENU_COMPLETE
+setopt BASH_AUTO_LIST
 
 #export LSCOLORS=Exfxcxdxbxegedabagacad
 unset LSCOLORS
