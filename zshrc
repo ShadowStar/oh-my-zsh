@@ -75,7 +75,8 @@ setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
-#setopt MENU_COMPLETE
+setopt MENU_COMPLETE
+setopt BASH_AUTO_LIST
 
 #export LSCOLORS=Exfxcxdxbxegedabagacad
 unset LSCOLORS
