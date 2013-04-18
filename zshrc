@@ -47,7 +47,7 @@ alias lh="ls -lh"
 alias grep="grep --color=auto"
 
 if [[ "`uname -s`" = "Darwin" ]]; then
-	export PATH=$PATH:/opt/bin:/opt/toolchain/bin
+	export PATH=$PATH:/opt/bin:/opt/oct-tools/bin:/opt/x86-tools/bin
 	export GNUPATH=/opt/gnu/bin
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"

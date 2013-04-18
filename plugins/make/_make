@@ -3,7 +3,7 @@
 # TODO: Based on targets given on the command line, show only variables that
 # are used in those targets and their dependencies.
 
-local prev="$words[CURRENT-1]" file expl tmp is_gnu dir incl match
+local prev="$words[CURRENT-1]" file expl tmp is_gnu dir incl match SED
 local -A TARGETS VARIABLES
 
 expandVars() {
@@ -200,23 +200,32 @@ else
   then
     if [[ $is_gnu == gnu ]] && zstyle -t ":completion:${curcontext}:targets" call-command
     then
+      SED='sed'
       basedir=`dirname $file`
       file=`basename $file`
       parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp --no-print-directory -C "$basedir" -f "$file" .PHONY 2> /dev/null)
     else
       case "$OSTYPE" in
         freebsd*)
+        SED='gsed'
         basedir=`dirname $file`
         file=`basename $file`
         parseMakefile $PWD < <(_call_program targets "$words[1]" -nsp -C "$basedir" -f "$file" .PHONY 2> /dev/null)
 	;;
+	darwin*)
+        SED='gsed'
+        parseMakefile $PWD < $file
+        basedir=`dirname $file`
+        file=`basename $file`
+	;;
 	*)
+        SED='sed'
         parseMakefile $PWD < $file
         basedir=`dirname $file`
         file=`basename $file`
       esac
     fi
-    for tg in `make -C $basedir -f $file -qp 2>/dev/null | gsed -e '/^[\s]*#/d' | gsed -nE '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/{N;/:.*\S+.*$/P}' | gsed -e 's/:.*//'`
+    for tg in `make -C $basedir -f $file -qp 2>/dev/null | $SED -e '/^[\s]*#/d' | $SED -nE '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/{N;/:.*\S+.*$/P}' | $SED -e 's/:.*//'`
     do
       TARGETS[$tg]=''
     done
