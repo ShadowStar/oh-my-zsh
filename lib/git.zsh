@@ -8,11 +8,17 @@ function git_prompt_info() {
 # Checks if working tree is dirty
 parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
+  local GIT_STATUS=''
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
     fi
-    if [[ -n $(git status -s --porcelain ${SUBMODULE_SYNTAX} 2> /dev/null | grep -v "^??") ]]; then
+    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" != "true" ]]; then
+        GIT_STATUS=$(git status -s --porcelain ${SUBMODULE_SYNTAX} 2> /dev/null)
+    else
+        GIT_STATUS=$(git status -s --porcelain ${SUBMODULE_SYNTAX} -uno 2> /dev/null)
+    fi
+    if [[ -n $GIT_STATUS ]]; then
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
