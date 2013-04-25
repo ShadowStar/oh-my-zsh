@@ -17,7 +17,7 @@ parse_git_dirty() {
         GIT_STATUS=$(git status -s --porcelain ${SUBMODULE_SYNTAX} 2> /dev/null)
     else
         GIT_STATUS=$(git status -s --porcelain ${SUBMODULE_SYNTAX} -uno 2> /dev/null)
-      fi
+    fi
     if [[ -n $GIT_STATUS ]]; then
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
