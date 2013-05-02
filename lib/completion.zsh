@@ -47,7 +47,7 @@ hosts=(
   localhost
 )
 zstyle ':completion:*:hosts' hosts $hosts
-zstyle ':completion:*' users off
+#zstyle ':completion:*' users off
 
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache 1
@@ -62,6 +62,16 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
         operator pcap postfix postgres privoxy pulse pvm quagga radvd \
         rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs
+
+# Don't complete uninteresting groups
+zstyle ':completion:*:*:*:groups' ignored-patterns \
+        adm amanda apache avahi beaglidx bin cacti canna clamav daemon \
+        dbus distcache dovecot fax ftp games gdm gkrellmd gopher \
+        hacluster haldaemon halt hsqldb ident junkbust ldap lp mail \
+        mailman mailnull mldonkey mysql nagios Guest _'*' \
+        named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
+        operator pcap postfix postgres privoxy pulse pvm quagga radvd \
+        rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs com.'*'
 
 # ... unless we really want to.
 zstyle '*' single-ignored show
