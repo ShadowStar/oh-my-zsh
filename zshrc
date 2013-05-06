@@ -93,4 +93,5 @@ setopt BASH_AUTO_LIST
 unset LSCOLORS
 unsetopt AUTO_CD
 unsetopt COMPLETE_IN_WORD
+unsetopt CORRECT_ALL
 
