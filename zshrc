@@ -80,7 +80,7 @@ if $(which vimpager >/dev/null); then
 	export PAGER="$(which vimpager)"
 fi
 
-#setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
@@ -94,4 +94,5 @@ unset LSCOLORS
 unsetopt AUTO_CD
 unsetopt COMPLETE_IN_WORD
 unsetopt CORRECT_ALL
+unsetopt SHARE_HISTORY
 
