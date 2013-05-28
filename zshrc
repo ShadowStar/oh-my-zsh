@@ -43,7 +43,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(osx make git svn)
+plugins=(osx make git svn mercurial)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -66,9 +66,9 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgs="pkgutil -v --pkgs"
 	alias ls="ls -G -F"
 elif [[ "`uname -s`" = "Linux" ]]; then
-	which gsed >/dev/null || which gnused >/dev/null && alias gsed="gnused" || alias gsed="sed"
-	which gawk >/dev/null || which gnuawk >/dev/null && alias gawk="gnuawk" || alias gawk="awk"
-	which exuberant-ctags >/dev/null || which ctags-exuberant >/dev/null && alias exuberant-ctags="ctags-exuberant" || alias exuberant-ctags="ctags"
+	which gsed >/dev/null 2>&1 || which gnused >/dev/null 2>&1 && alias gsed="gnused" || alias gsed="sed"
+	which gawk >/dev/null 2>&1 || which gnuawk >/dev/null 2>&1 && alias gawk="gnuawk" || alias gawk="awk"
+	which exuberant-ctags >/dev/null 2>&1 || which ctags-exuberant >/dev/null 2>&1 && alias exuberant-ctags="ctags-exuberant" || alias exuberant-ctags="ctags"
 	alias ls="ls --color=auto -F"
 fi
 
@@ -76,11 +76,11 @@ export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 #export TERM=xterm-color
 
-if $(which vimpager >/dev/null); then
+if $(which vimpager >/dev/null 2>&1); then
 	export PAGER="$(which vimpager)"
 fi
 
-#setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt AUTO_LIST
@@ -94,4 +94,5 @@ unset LSCOLORS
 unsetopt AUTO_CD
 unsetopt COMPLETE_IN_WORD
 unsetopt CORRECT_ALL
+unsetopt SHARE_HISTORY
 
