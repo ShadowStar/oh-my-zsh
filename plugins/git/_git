@@ -511,6 +511,7 @@ _git_urls () {
     local expl
     compset -S '[^:]*'
     _wanted url-schemas expl 'URL schema' compadd -S '' - \
+      ftp:// ftps:// rsync:// \
       http:// https:// ssh:// git:// file:/// git@
     _wanted users expl 'user to log in as' _users -S@
   fi
