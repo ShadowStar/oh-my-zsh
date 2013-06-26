@@ -755,6 +755,7 @@ _git-remote () {
         'rm:remove a remote from .git/config and all associated tracking branches'
         'set-head:sets or deletes the default branch for the named remote'
         'set-url:changes URL remote points to'
+        'set-branches:changes the list of branches tracked by the named remote.'
         'rename:rename a remote from .git/config and update all associated tracking branches')
 
       _describe -t commands 'sub-command' commands && ret=0
@@ -799,6 +800,12 @@ _git-remote () {
             '--delete[instead of changing some URL, all URLs matching regex <url> are deleted]' \
             ':remote:__git_remotes'\
             ':url:_git_urls' && ret=0
+          ;;
+        (set-branches)
+          _arguments \
+            '--add[instead of replacing, adds to that list]' \
+            ':remote:__git_remotes' \
+            ':branch:__git_branch_names' && ret=0
           ;;
         (rename)
           __git_remotes && ret=0
@@ -4116,7 +4123,7 @@ __git_config_values () {
       values=(
         {true,refuse}':deny the ref updates to the currently checked out branch of a non-bare repository.'
         {false,ignore}':allow the ref updates to the currently checked out branch of a non-bare repository.'
-	'warn:print a warning of such a push to stderr, but allow the push.')
+        'warn:print a warning of such a push to stderr, but allow the push.')
 
       _describe -t values 'value' values
       ;;
