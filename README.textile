@@ -1,3 +1,13 @@
+h2. My fork of oh-my-zsh on OS X
+
+More git completion
+
+More make completion
+
+Some other changes
+
+h2. original message
+
 oh-my-zsh is an open source, community-driven framework for managing your ZSH configuration. It comes bundled with a ton of helpful functions, helpers, plugins, themes, and few things that make you shout...
 
 bq. "OH MY ZSHELL!"

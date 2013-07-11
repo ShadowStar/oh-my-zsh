@@ -141,6 +141,7 @@ help_arg='-h[display usage information]'
 upload_pack_arg=('(-u --upload-pack)'{-u,--upload-pack=-}'[specify path to git-upload-pack on remote side]:remote path')
 
 common_fetch_args=(
+  '--all[fetch all remotes]'
   '(-a --append)'{-a,--append}'[append ref names and object names of fetched refs to "$GIT_DIR/FETCH_HEAD"]'
   $upload_pack_arg
   $force_ref_arg
@@ -510,6 +511,7 @@ _git_urls () {
     local expl
     compset -S '[^:]*'
     _wanted url-schemas expl 'URL schema' compadd -S '' - \
+      ftp:// ftps:// rsync:// \
       http:// https:// ssh:// git:// file:/// git@
     _wanted users expl 'user to log in as' _users -S@
   fi
@@ -753,6 +755,7 @@ _git-remote () {
         'rm:remove a remote from .git/config and all associated tracking branches'
         'set-head:sets or deletes the default branch for the named remote'
         'set-url:changes URL remote points to'
+        'set-branches:changes the list of branches tracked by the named remote.'
         'rename:rename a remote from .git/config and update all associated tracking branches')
 
       _describe -t commands 'sub-command' commands && ret=0
@@ -797,6 +800,12 @@ _git-remote () {
             '--delete[instead of changing some URL, all URLs matching regex <url> are deleted]' \
             ':remote:__git_remotes'\
             ':url:_git_urls' && ret=0
+          ;;
+        (set-branches)
+          _arguments \
+            '--add[instead of replacing, adds to that list]' \
+            ':remote:__git_remotes' \
+            ':branch:__git_branch_names' && ret=0
           ;;
         (rename)
           __git_remotes && ret=0
@@ -1299,10 +1308,10 @@ _git-peek-remote () {
   _arguments \
     '--upload-pack=-[specify path to git-upload-pack on remote side]:remote path' \
     $exec_arg \
-    '--tags[undocumented]' \
-    '--heads[undocumented]' \
-    '--refs[undocumented]' \
-    ':repository:__git_repository' && ret=0
+    '--tags[only tags]' \
+    '--heads[only heads]' \
+    '--refs[only refs]' \
+    ':repository:__git_any_repositories' && ret=0
 }
 
 (( $+functions[_git-sh-setup] )) ||
@@ -1808,6 +1817,7 @@ _git-diff () {
 _git-fetch () {
   _arguments \
     $common_fetch_args \
+    '--dry-run[show what would be done, without making any changes]' \
     ':repository:__git_any_repositories' \
     '*:refspec:__git_ref_specs' && ret=0
 }
@@ -1958,7 +1968,8 @@ _git-ls-remote () {
 _git-merge () {
   _arguments \
     "$merge_args[@]" \
-    '-m:merge message' \
+    '-m[merge message]' \
+    '--abort[abort the current conflict resolution process]' \
     '*:remote:__git_commits' && ret=0
 }
 
@@ -1997,6 +2008,8 @@ _git-push () {
     '--repo=-[default repository to use]:repository:__git_any_repositories' \
     '(       --no-thin)--thin[try to minimize number of objects to be sent]' \
     '(--thin          )--no-thin[do not try to minimize number of objects to be sent]' \
+    '--set-upstream[set upstream reference after successfully pushed]' \
+    '--recurse-submodules=-[make sure all submodule commits are available on remote]:check_submodule:(check on-demand)' \
     $verbose_arg \
     '::repository:__git_any_repositories' \
     '*::refspec:__git_ref_specs' && ret=0
@@ -4110,7 +4123,7 @@ __git_config_values () {
       values=(
         {true,refuse}':deny the ref updates to the currently checked out branch of a non-bare repository.'
         {false,ignore}':allow the ref updates to the currently checked out branch of a non-bare repository.'
-	'warn:print a warning of such a push to stderr, but allow the push.')
+        'warn:print a warning of such a push to stderr, but allow the push.')
 
       _describe -t values 'value' values
       ;;
