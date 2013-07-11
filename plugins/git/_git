@@ -1776,11 +1776,13 @@ _git-commit () {
     '--allow-empty[allow recording an empty commit]' \
     '(-a --all --interactive)'{-a,--all}'[update all paths in the index file]' \
     '(-a --all --interactive)--interactive[interactively update paths in the index file]' \
-    '--author[override the author name used in the commit]:author name' \
+    '--author=-[override the author name used in the commit]:author name' \
+    '--date=-[override the author date used in the commit]:datestring' \
     '--cleanup=-[specify how the commit message should be cleaned up]:mode:((verbatim\:"don'\''t change the commit message at all"
                                                                              whitespace\:"remove leading and trailing whitespace lines"
                                                                              strip\:"remove both whitespace and commentary lines"
                                                                              default\:"act as '\''strip'\'' if the message is to be edited and as '\''whitespace'\'' otherwise"))' \
+    '(-p --patch)'{-p,--patch}'[use the interactive patch selection interface to chose which changes to commit]' \
     '(-e --edit)'{-e,--edit}'[edit the commit message before committing]' \
     '(-o --only -i --include)'{-i,--include}'[update the given files and commit the whole index]' \
     '(-o --only -i --include)'{-o,--only}'[commit only the given files]' \
@@ -1788,7 +1790,15 @@ _git-commit () {
     '(-s --signoff)'{-s,--signoff}'[add Signed-off-by line at the end of the commit message]' \
     '(-q --quiet -v --verbose)'{-q,--quiet}'[suppress commit summary message]' \
     '(-q --quiet -v --verbose)'{-v,--verbose}'[show unified diff of all file changes]' \
-    '(-u --untracked-files)'{-u,--untracked-files}'[show files in untracked directories]' \
+    '(-u --untracked-files=)'{-u,--untracked-files=}'-[show untracked files]:untracked file:((no\:"show no untracked files"
+                                                                                              normal\:"shows untracked files and directories"
+                                                                                              all\:"shows individual files in untracked directories"))' \
+    '(--status --no-status)'{--status,--no-status}'[include the output of git-status in the commit message template or NOT]' \
+    '--dry-run[do not create a commit, but show a list of paths that are to be committed]' \
+    '--short[give the output in the short-format while dry-run]' \
+    '--branch[show the branch and tracking info even in short-format]' \
+    '--porcelain[give the output in a porcelain-ready format while dry-run]' \
+    '--reset-author[declare committer to be the authorship while used used with -C/-c/--amend options or committing after a a conflicting cherry-pick]' \
     '*:file:__git_changed_files' \
     - '(message)' \
       '--amend[amend the tip of the current branch]' \
@@ -1798,7 +1808,6 @@ _git-commit () {
       {-m,--message=}'[use the given message as the commit message]:message' && ret=0
 }
 __git_zstyle_default ':completion::complete:git-commit:argument-rest:*' ignore-line yes
-
 
 # TODO: __git_files should be __git_tree_files (do like in git-diff-tree and
 # such)
@@ -2009,7 +2018,8 @@ _git-push () {
     '(       --no-thin)--thin[try to minimize number of objects to be sent]' \
     '(--thin          )--no-thin[do not try to minimize number of objects to be sent]' \
     '--set-upstream[set upstream reference after successfully pushed]' \
-    '--recurse-submodules=-[make sure all submodule commits are available on remote]:check_submodule:(check on-demand)' \
+    '--recurse-submodules=-[make sure all submodule commits are available on remote]:check_submodule:((check\:"verify the commits on remotes"
+                                                                                                       on-demand\:"push the commits as needed"))' \
     $verbose_arg \
     '::repository:__git_any_repositories' \
     '*::refspec:__git_ref_specs' && ret=0
@@ -2151,10 +2161,19 @@ _git-show-branch () {
 
 (( $+functions[_git-status] )) ||
 _git-status () {
-  _git-commit
+  _arguments -S \
+    '(-s --short)'{-s,--short}'[give the output in the short-format]' \
+    '(-b --branch)'{-b,--branch}'[show the branch and tracking info even in short-format]' \
+    '--porcelain[give the output in an easy-to-parse format for scripts]' \
+    '(-u --untracked-files=)'{-u,--untracked-files=}'-[show untracked files]:untracked file:((no\:"show no untracked files"
+                                                                                              normal\:"shows untracked files and directories"
+                                                                                              all\:"shows individual files in untracked directories"))' \
+    '--ignore-submodule=-[Ignore changes to submodules]:ignore submodule:(none untracked dirty all)' \
+    '--ignored[Show ignored files as well]' \
+    '-z[Terminate entries with NUL, instead of LF]' \
+    ':directory:_directories' && ret=0
 }
 __git_zstyle_default ':completion::complete:git-status:argument-rest:*' ignore-line yes
-
 
 (( $+functions[__git_stashes] )) ||
 __git_stashes () {
@@ -2452,7 +2471,6 @@ _git-check-ref-format () {
   _arguments \
     ':reference:__git_revisions' && ret=0
 }
-
 
 (( $+functions[_git-cherry] )) ||
 _git-cherry () {
