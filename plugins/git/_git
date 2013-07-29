@@ -3344,13 +3344,14 @@ __git_references () {
 #    'heads::__git_heads' \
 #    'tags::__git_tags' && ret=0
   local expl
+  declare -a _git_refs_cache
 
   # TODO: deal with GIT_DIR
-  if [[ $_git_refs_cache_pwd != $PWD ]]; then
+#  if [[ $_git_refs_cache_pwd != $PWD ]]; then
     _git_refs_cache=(${${${(f)"$(_call_program references git ls-remote ./. 2>/dev/null)"}#*$'\t'}#refs/(heads|tags)/})
     __git_command_successful || return
-    _git_refs_cache_pwd=$PWD
-  fi
+#    _git_refs_cache_pwd=$PWD
+#  fi
 
   _wanted references expl 'references' compadd - $_git_refs_cache
 }
@@ -3358,12 +3359,13 @@ __git_references () {
 (( $+functions[__git_local_references] )) ||
 __git_local_references () {
   local expl
+  declare -a _git_local_refs_cache
 
-  if [[ $_git_local_refs_cache_pwd != $PWD ]]; then
+#  if [[ $_git_local_refs_cache_pwd != $PWD ]]; then
     _git_local_refs_cache=(${${${(f)"$(_call_program references git ls-remote ./. 2>/dev/null)"}#*$'\t'}#refs/})
     __git_command_successful || return
-    _git_local_refs_cache_pwd=$PWD
-  fi
+#    _git_local_refs_cache_pwd=$PWD
+#  fi
 
   _wanted references expl 'references' compadd - $_git_local_refs_cache
 }
