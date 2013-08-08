@@ -57,7 +57,7 @@ alias la="ls -a"
 alias ll="ls -l"
 alias lla="ls -la"
 alias lh="ls -lh"
-alias grep="grep --color=auto"
+alias grep="grep --binary-files=without-match --color=auto"
 
 if [[ "`uname -s`" = "Darwin" ]]; then
 	export PATH=$PATH:/opt/bin:/opt/oct-tools/bin:/opt/x86-tools/bin
