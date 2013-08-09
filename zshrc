@@ -59,8 +59,10 @@ alias lla="ls -la"
 alias lh="ls -lh"
 alias grep="grep --binary-files=without-match --color=auto"
 
+export CTPATH=/opt/oct-tools/bin:/opt/x86-tools/bin:/opt/arm-tools/bin
+
 if [[ "`uname -s`" = "Darwin" ]]; then
-	export PATH=$PATH:/opt/bin:/opt/oct-tools/bin:/opt/x86-tools/bin
+	export PATH=$PATH:/opt/bin:$CTPATH
 	export GNUPATH=/opt/gnu/bin
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
