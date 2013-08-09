@@ -68,9 +68,6 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgs="pkgutil -v --pkgs"
 	alias ls="ls -G -F"
 elif [[ "`uname -s`" = "Linux" ]]; then
-	which gsed >/dev/null 2>&1 || which gnused >/dev/null 2>&1 && alias gsed="gnused" || alias gsed="sed"
-	which gawk >/dev/null 2>&1 || which gnuawk >/dev/null 2>&1 && alias gawk="gnuawk" || alias gawk="awk"
-	which exuberant-ctags >/dev/null 2>&1 || which ctags-exuberant >/dev/null 2>&1 && alias exuberant-ctags="ctags-exuberant" || alias exuberant-ctags="ctags"
 	alias ls="ls --color=auto -F"
 fi
 
