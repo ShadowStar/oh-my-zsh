@@ -63,7 +63,21 @@ export CTPATH=/opt/oct-tools/bin:/opt/x86-tools/bin:/opt/arm-tools/bin
 
 if [[ "`uname -s`" = "Darwin" ]]; then
 	export PATH=$PATH:/opt/bin:$CTPATH
-	export GNUPATH=/opt/gnu/bin
+	if [[ -x $(which brew) ]]; then
+		if [[ -n $(brew list gnu-getopt) ]]; then
+			GNUPATH=$(brew --prefix gnu-getopt)/bin
+		fi
+	fi
+	for gnupath in $(find /usr/local -name 'gnubin'); do
+		if [[ -n "$GNUPATH" ]]; then
+			GNUPATH=$GNUPATH:$gnupath
+		else
+			GNUPATH=$gnupath
+		fi
+	done
+	if [[ -n "$GNUPATH" ]]; then
+		export GNUPATH
+	fi
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
 	alias pkgfinfo="pkgutil -v --file-info"
