@@ -5,9 +5,11 @@ function remote_info() {
 }
 
 function user_info() {
-	if [ -n "$SUDO_USER" ]; then
-		echo "$SUDO_USER[S] "
-	elif [[ "$DISABLE_USER_INFO" != "true" ]]; then
-		echo "$USER "
+	if [[ "$DISABLE_USER_INFO" != "true" ]]; then
+		if [ -n "$SUDO_USER" ]; then
+			echo "${SUDO_USER}[S] "
+		else
+			echo "$USER "
+		fi
 	fi
 }
