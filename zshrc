@@ -59,17 +59,11 @@ alias lla="ls -la"
 alias lh="ls -lh"
 alias grep="grep --binary-files=without-match --color=auto"
 
-export CTPATH=/opt/oct-tools/bin:/opt/x86-tools/bin:/opt/arm-tools/bin
+export CTPATH=$(echo /opt/*-tools/bin | tr ' ' ':')
 
 if [[ "`uname -s`" = "Darwin" ]]; then
 	export PATH=$PATH:/opt/bin:$CTPATH
-	for gnupath in $(find /usr/local -name 'gnubin'); do
-		if [[ -n "$GNUPATH" ]]; then
-			GNUPATH=$GNUPATH:$gnupath
-		else
-			GNUPATH=$gnupath
-		fi
-	done
+	GNUPATH=$(echo /usr/local/Cellar/*/*/libexec/gnubin | tr ' ' ':')
 	if [[ -x $(which brew) ]]; then
 		if [[ -n $(brew list gnu-getopt) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gnu-getopt)/bin
