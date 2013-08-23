@@ -40,7 +40,7 @@ DISABLE_USER_INFO="true"
 # Uncomment following line if you want to disable marking untracked files under
 # VCS as dirty. This makes repository status check for large repositories much,
 # much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -59,10 +59,12 @@ alias lla="ls -la"
 alias lh="ls -lh"
 alias grep="grep --binary-files=without-match --color=auto"
 
-export CTPATH=$(echo /opt/*-tools/bin | tr ' ' ':')
+export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
 if [[ "`uname -s`" = "Darwin" ]]; then
-	export PATH=$PATH:/opt/bin:$CTPATH
+	if [[ -n ${CTPATH} ]]; then
+		export PATH=$PATH:/opt/bin:$CTPATH
+	fi
 	GNUPATH=$(echo /usr/local/Cellar/*/*/libexec/gnubin | tr ' ' ':')
 	if [[ -x $(which brew) ]]; then
 		if [[ -n $(brew list gnu-getopt) ]]; then
