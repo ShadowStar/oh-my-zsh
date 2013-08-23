@@ -40,7 +40,7 @@ DISABLE_AUTO_UPDATE="true"
 # Uncomment following line if you want to disable marking untracked files under
 # VCS as dirty. This makes repository status check for large repositories much,
 # much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -59,25 +59,22 @@ alias lla="ls -la"
 alias lh="ls -lh"
 alias grep="grep --binary-files=without-match --color=auto"
 
-export CTPATH=/opt/oct-tools/bin:/opt/x86-tools/bin:/opt/arm-tools/bin
+export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
 if [[ "`uname -s`" = "Darwin" ]]; then
-	export PATH=$PATH:/opt/bin:$CTPATH
+	if [[ -n ${CTPATH} ]]; then
+		export PATH=$PATH:/opt/bin:$CTPATH
+	fi
+	GNUPATH=$(echo /usr/local/Cellar/*/*/libexec/gnubin | tr ' ' ':')
 	if [[ -x $(which brew) ]]; then
 		if [[ -n $(brew list gnu-getopt) ]]; then
-			GNUPATH=$(brew --prefix gnu-getopt)/bin
+			GNUPATH=$GNUPATH:$(brew --prefix gnu-getopt)/bin
+		fi
+		if [[ -n $(brew list gettext) ]]; then
+			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
 		fi
 	fi
-	for gnupath in $(find /usr/local -name 'gnubin'); do
-		if [[ -n "$GNUPATH" ]]; then
-			GNUPATH=$GNUPATH:$gnupath
-		else
-			GNUPATH=$gnupath
-		fi
-	done
-	if [[ -n "$GNUPATH" ]]; then
-		export GNUPATH
-	fi
+	export GNUPATH
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
 	alias pkgfinfo="pkgutil -v --file-info"
