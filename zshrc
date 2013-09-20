@@ -62,8 +62,9 @@ alias grep="grep --binary-files=without-match --color=auto"
 export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
 if [[ "`uname -s`" = "Darwin" ]]; then
+	PATH=$PATH:/opt/bin
 	if [[ -n ${CTPATH} ]]; then
-		export PATH=$PATH:/opt/bin:$CTPATH
+		PATH=$PATH:$CTPATH
 	fi
 	GNUPATH=$(echo /usr/local/Cellar/*/*/libexec/gnubin | tr ' ' ':')
 	if [[ -x $(which brew) ]]; then
@@ -74,6 +75,7 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
 		fi
 	fi
+	export PATH
 	export GNUPATH
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
