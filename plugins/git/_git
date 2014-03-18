@@ -155,6 +155,7 @@ common_fetch_args=(
 
 common_apply_args=(
   '--ignore-whitespace[ignore changes in whitespace in context lines if necessary]'
+  '--reject[apply as much as possible, and leave rejected hunks in .rej files]'
   '--whitespace=-[detect a new or modified line that ends with trailing whitespaces]: :__git_apply_whitespace_strategies'
   '-p-[remove N leading slashes from traditional diff paths]: :_guard  "[[\:digit\:]]#" number'
   '-C-[ensure at least N lines of context match before and after each change]: :_guard  "[[\:digit\:]]#" number')
@@ -438,7 +439,6 @@ _git-apply () {
     '--no-add[ignore additions made by the patch]' \
     '--numstat[same as --stat but in decimal notation and complete pathnames (turns off "apply")]' \
     '(-R --reverse)'{-R,--reverse}'[apply patches in reverse]' \
-    '--reject[apply as much as possible, and leave rejected hunks in .rej files]' \
     '--stat[output diffstat for the input (turns off "apply")]' \
     '--summary[output summary of git-diff extended headers (turns off "apply")]' \
     '--unidiff-zero[disable unified-diff-context check]' \
@@ -1504,6 +1504,7 @@ _git-am () {
     '--3way[use 3-way merge if patch does not apply cleanly]' \
     '--abort[restore the original branch and abort the patching operation]' \
     '--binary[pass "--allow-binary-replacement" to "git-apply"]' \
+    '--continue[continue apply after resolved patch failure]' \
     '--dotest=-[use given directory as working area instead of .dotest]:directory:_directories' \
     '--interactive[apply patches interactively]' \
     '--keep[pass "-k" flag to "git-mailinfo"]' \
