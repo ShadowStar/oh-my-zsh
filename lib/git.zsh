@@ -14,7 +14,9 @@ parse_git_dirty() {
   local CLEAN_MESSAGE='nothing to commit (working directory clean)'
   if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-          SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+	    if [[ "$DISABLE_SUBMODULE_DIRTY" == "true" ]]; then
+		    SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+	    fi
     fi
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
         GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
