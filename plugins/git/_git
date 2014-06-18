@@ -1729,6 +1729,9 @@ _git-checkout () {
 (( $+functions[_git-cherry-pick] )) ||
 _git-cherry-pick () {
   _arguments \
+    '--continue[continue after resolving conflicts]' \
+    '--quit[clear the state after a failed]' \
+    '--abort[cancel the operation and return pre-state]' \
     '(-e --edit)'{-e,--edit}'[edit commit before committing the revert]' \
     '(-n --no-commit)'{-n,--no-commit}'[do not make the actually commit]' \
     '(-r --replay)'{-r,--replay}'[use original commit message intact]' \
@@ -2112,6 +2115,9 @@ _git-reset () {
 (( $+functions[_git-revert] )) ||
 _git-revert () {
   _arguments -s -w \
+    '--continue[continue after resolving conflicts]' \
+    '--quit[clear the state after a failed]' \
+    '--abort[cancel the operation and return pre-state]' \
     '(-e --edit)'{-e,--edit}'[edit the commit before committing the revert]' \
     '--no-edit[do not edit the commit message]' \
     '-x[append commit name when cherry-picking]' \
