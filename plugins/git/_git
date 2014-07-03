@@ -2223,7 +2223,12 @@ _git-stash () {
           '2:branch name:' \
           '*:stash:__git_stashes' && ret=0
         ;;
-      (drop|pop|show)
+      (show)
+        _arguments \
+          $diff_args \
+          '*:stash:__git_stashes' && ret=0
+        ;;
+      (drop|pop)
         _arguments \
           '*:stash:__git_stashes' && ret=0
         ;;
