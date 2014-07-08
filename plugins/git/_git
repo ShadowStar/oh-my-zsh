@@ -1667,6 +1667,9 @@ _git-branch () {
       '--merged[only list branches which are fully contained by HEAD]' \
       '--no-merged[do not list branches which are fully contained by HEAD]' \
       '--set-upstream[set the start point of branch]' \
+      '--unset-upstream[remove the upstream information for branch]' \
+      '*'{-u,--set-upstream-to=-}'[set up branch'\''s tracking information]:upstream branch:__git_revisions' \
+      '--edit-description[edit the text to explain what the branch is for]' \
       ':branch-name:__git_branch_names' \
       '::start-point:__git_revisions' \
     - modify \
