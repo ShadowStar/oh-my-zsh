@@ -210,6 +210,7 @@ _git_commands () {
     'stash:stash away changes to the working tree'
     'status:show working-tree'\''s status'
     'submodule:initialize or update or inspect submodules'
+    'subtree:initialize or update or push subtree'
     'tag:create tag object signed with GPG'
     'verify-tag:check GPG signature of a tag')
 
@@ -2945,6 +2946,76 @@ _git-submodule () {
 
       _arguments -C \
         '(-h -H --help)'{-h,-H,--help}'[display usage information]' \
+        $arguments && ret=0
+      ;;
+  esac
+}
+
+(( $+functions[_git-subtree] )) ||
+_git-subtree () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+
+  _arguments -C \
+    '(- :)--help[display help message]' \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+
+  case $state in
+    (command)
+      declare -a commands
+
+      commands=(
+        'add:create the subtree from the commit or repository and remote ref'
+        'merge:merge recent changes up to commit into the subtree.'
+        'pull:pull the given ref of repository to the subtree.'
+        'push:push the subtree to the given ref of repository'
+        'split:extract a new project history from the subtree.')
+        _describe -t commands 'git-subtree' commands && ret=0
+      ;;
+    (options)
+      declare -a arguments
+
+      arguments+=('(-q --quiet)'{-q,--quiet}'[only print error messages]'
+      '(-h --help)'{-h,--help}'[show the help]'
+      '(-d --debug)'{-d,--debug}'[produce even more unnecessary output messages on stderr.]'
+      '*'{-P,--prefix=-}'[the name of subtree directory]:directory:_directories')
+
+      if [[ $line[1] == (add|merge) ]]; then
+        arguments+=(
+        '(-m --message)'[-m,--message]'[specify the commit message]')
+      fi
+
+      if [[ $line[1] == (add|merge|pull|push) ]]; then
+        arguments+=(
+        '--squash[produce only a single commit that contains all the differences]')
+      fi
+
+      if [[ $line[1] == split ]]; then
+        arguments+=('--annotate=-[add a prefix to commit message of new commits]:prefix'
+        '(-b --branch)'{-b,--branch}'[create a new branch from the split subtree]:branch'
+        '--ignore-joins[ignore prior --rejoin commits]'
+        '--onto[try connecting new tree to an existing one]:commits:__git_commits'
+        '--rejoin[merge the new branch back into HEAD]')
+      fi
+      case $line[1] in
+        (add)
+          arguments+=('::repositories:__git_repository'
+          ':commits:__git_commits')
+          ;;
+        (merge)
+          arguments+=(':commits:__git_commits')
+          ;;
+        (pull|push)
+          arguments+=(':repositories:__git_repository'
+          '::references:__git_references')
+          ;;
+        (split)
+          arguments+=(':commits:__git_commits')
+          ;;
+      esac
+
+      _arguments -C \
         $arguments && ret=0
       ;;
   esac
