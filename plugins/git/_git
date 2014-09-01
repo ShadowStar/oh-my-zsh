@@ -890,6 +890,8 @@ _git-describe () {
     '--match=[only consider tags matching glob pattern]:pattern' \
     '--candidates=-[consider up to given number of candidates]: :_guard "[[\:digit\:]]##" "number of candidates"' \
     '--debug[display information about the searching strategy]' \
+    '--first-parent[only follow first parent]' \
+    '--dirty=-[append <mark> on dirty working tree]:string' \
     '*:committish:__git_committishs' && ret=0
 }
 
