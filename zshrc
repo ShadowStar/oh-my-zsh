@@ -82,7 +82,8 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
 	alias pkgfinfo="pkgutil -v --file-info"
-	alias pkgs="pkgutil -v --pkgs"
+	alias pkgs="pkgutil --pkgs"
+	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
 	alias ls="ls -G -F"
 elif [[ "`uname -s`" = "Linux" ]]; then
 	alias ls="ls --color=auto -F"
