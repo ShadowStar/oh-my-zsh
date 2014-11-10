@@ -4515,13 +4515,10 @@ __git_gpg_secret_keys () {
 (( $+functions[__git_merge_strategies] )) ||
 __git_merge_strategies () {
   local expl
-  local -a merge_strategies
 
-  if ! merge_strategies=(${=${${(M)${(f)"$(_call_program strategies git merge -s '' 2>&1)"}:#[Aa]vailable (custom )#strategies are: *}#[Aa]vailable (custom )#strategies are: }%.}); then
-    merge_strategies=(${=${${(M)${(f)"$(<$(git --exec-path)/git-merge)"}:#all_strategies*}##all_strategies=\'}%%\'})
-  fi
-
-  _wanted merge-strategies expl 'merge strategy' compadd -a merge_strategies "$@"
+  _wanted merge-strategies expl 'merge strategy' compadd "$@" - \
+      ${=${${${(M)${(f)"$(_call_program merge-strategies \
+      "git merge -s '' 2>&1")"}:#[Aa]vailable (custom )#strategies are: *}#[Aa]vailable (custom )#strategies are: }%.}:-octopus ours recursive resolve subtree}
 }
 
 # TODO: Use this in more places.
