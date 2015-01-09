@@ -86,6 +86,7 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgs="pkgutil --pkgs"
 	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
 	alias ls="ls -G -F"
+	alias GetBTMMAddr="echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'"
 elif [[ "`uname -s`" = "Linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
