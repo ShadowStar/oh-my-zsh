@@ -36,7 +36,6 @@ zstyle ':completion:*:*:*:functions' ignored-patterns '*'
 
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
-cdpath=(.)
 
 # use /etc/hosts and known_hosts for hostname completion
 [ -r /etc/ssh/ssh_known_hosts ] && _global_ssh_hosts=(${${${${${${${(f)"$(</etc/ssh/ssh_known_hosts)"}:#[\|]*}%%\ *}%%,*}%:*}#\[}%\]}) || _global_ssh_hosts=()
