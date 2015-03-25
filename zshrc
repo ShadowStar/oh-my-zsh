@@ -48,7 +48,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(brew osx make git svn mercurial tmux colored-man zsh_reload)
+plugins=(brew docker osx make git svn mercurial tmux colored-man zsh_reload)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -77,6 +77,9 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 		if [[ -n $(brew list gettext) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
 		fi
+	fi
+	if [[ -x $(which boot2docker) ]]; then
+		eval $(boot2docker shellinit 2>/dev/null)
 	fi
 	export PATH
 	export GNUPATH
