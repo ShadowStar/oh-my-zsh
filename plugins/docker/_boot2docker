@@ -1,0 +1,63 @@
+#compdef boot2docker
+
+local curcontext="$curcontext" state line ret=1
+typeset -A opt_args
+local -a subcmds options
+
+subcmds=(
+'init:Create a new Boot2Docker VM]'
+{up,start,boot}':Start VM from any states'
+'ssh:Login to VM via SSH]'
+{save,suspend}':Suspend VM and save state to disk]'
+{down,stop,halt}':Gracefully shutdown the VM]'
+'restart:Gracefully reboot the VM]'
+'poweroff:Forcefully power off the VM (may corrupt disk image)]'
+'reset:Forcefully power cycle the VM (may corrupt disk image)]'
+{delete,destroy}':Delete Boot2Docker VM and its disk image]'
+{config,cfg}':Show selected profile file settings]'
+'info:Display detailed information of VM]'
+'ip:Display the IP address of the VM'\''s Host-only network]'
+'shellinit:Display the shell commands to set up the Docker client]'
+'status:Display current state of VM]'
+'download:Download Boot2Docker ISO image]'
+'upgrade:Upgrade the Boot2Docker ISO image (restart if running)]'
+'version:Display version information]'
+)
+
+options=(
+'--basevmdk=-[Path to VMDK to use as base for persistent partition]:::_files'
+'--clobber=-[overwrite Docker client binary on boot2docker upgrade]:::(true false)'
+'--dhcp=-[enable VirtualBox host-only network DHCP]:::(true false)'
+'--dhcpip=-[VirtualBox host-only network DHCP server address]:::_hosts'
+'(-s --disksize=-)'{-s,--disksize=-}'[boot2docker disk image size (in MB)]:::(20000)'
+'--dockerport=-[host Docker port (forward to port 2376 in VM). (deprecated - use with care)]:::(0)'
+'--driver=-[hypervisor driver]:::(virtualbox)'
+'--force-upgrade-download=-[always download on boot2docker upgrade, never skip]:::(false true)'
+'--hostip=-[VirtualBox host-only network IP address]:::_hosts'
+'--iso=-[path to boot2docker ISO image]:::_files'
+'--iso-url=-[source URL to provision the boot2docker ISO image]:::_urls'
+'--lowerip=-[VirtualBox host-only network DHCP lower bound]:::_hosts'
+'(-m --memory)'{-m,--memory=-}'[virtual machine memory size (in MB)]:::(2048)'
+'--netmask=-[VirtualBox host-only network mask]:::(ffffff00)'
+'--no-dummy=-[Example parameter for the dummy driver]:::("")'
+'--retries=-[number of port knocking retries during '\''start'\'']:::(75)'
+'--serial=-[try serial console to get IP address (experimental)]:::(false true)'
+'--serialfile=-[path to the serial socket/pipe]:::_files'
+'--ssh=-[path to SSH client utility]:::_files'
+'--ssh-keygen=-[path to ssh-keygen utility]:::_files'
+'--sshkey=-[path to SSH key to use]:::_files'
+'--sshport=-[host SSH port (forward to port 22 in VM)]:::(2022)'
+'--upperip=-[VirtualBox host-only network DHCP upper bound]:::_hosts'
+'--vbm=-[path to VirtualBox management utility]:::_files'
+'--vbox-share=-[(defaults to '\''/Users=Users'\'' if no shares are specified; use '\''disable'\'' to explicitly prevent any shares from being created) List of directories to share during '\''up|start|boot'\'' via VirtualBox Guest Additions, with optional labels]:::(disable)'
+'(-v --verbose)'{-v,--verbose=-}'[display verbose command invocations]:::(false true)'
+'--vm=-[virtual machine name]:::(boot2docker-vm)'
+'--waittime=-[Time in milliseconds to wait between port knocking retries during '\''start'\'']:::(300)'
+)
+
+_arguments -C \
+  $options \
+  '(-)*:: :->opts' && return 0
+
+_describe -t commands 'boot2docker' subcmds
+
