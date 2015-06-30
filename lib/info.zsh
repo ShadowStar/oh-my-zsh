@@ -13,3 +13,11 @@ function user_info() {
 		fi
 	fi
 }
+
+function last_cmd_info() {
+	if [[ $? = 0 ]]; then
+		echo ${ZSH_THEME_LAST_CMD_SUCCESS}
+	else
+		echo ${ZSH_THEME_LAST_CMD_FAILED}
+	fi
+}
