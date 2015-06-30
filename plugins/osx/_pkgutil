@@ -1,0 +1,58 @@
+#compdef pkgutil
+
+__pkglist ()
+{
+	local -a list
+	list=($(pkgutil --pkgs))
+	_describe -t pkglist 'pkglist' list && _ret=0
+}
+
+__pkggrps ()
+{
+	local -a list
+	list=($(pkgutil --groups))
+	_describe -t pkggrps 'pkggrps' list && ret=0
+}
+
+__pkgcmds ()
+{
+	_arguments -w -S -s \
+	'(--pkgs --packages)'{--pkgs,--packages}'[List all currently installed package IDs on --volume]' \
+	'--pkgs-plist[List all package IDs on --volume in plist format]' \
+	'--pkgs=-[List package IDs on --volume that match REGEXP]' \
+	'--groups[List all GROUPIDs on --volume]' \
+	'--groups-plist[List all GROUPIDs on --volume in plist format]' \
+	'--group-pkgs[List all PKGIDs in GROUPID]: :__pkggrps' \
+	'--files[List files installed by the specified package]: :__pkglist' \
+	'--lsbom[List files in the same format as '\''lsbom -s'\'']: :__pkglist' \
+	'--pkg-groups[List all GROUPIDs that PKGID is a member of]: :__pkglist' \
+	'--export-plist[Print all info about PKGID in plist format]: :__pkglist' \
+	'--verify[Verify file permissions of the specified package]: :__pkglist' \
+	'--repair[Repair file permissions of the specified package]: :__pkglist' \
+	'--pkg-info[Show metadata about PKGID]: :__pkglist' \
+	'--pkg-info-plist[Show metadata about PKGID in plist format]: :__pkglist' \
+	'--file-info[Show metadata known about PATH]: :_directories' \
+	'--file-info-plist[Show metadata known about PATH in plist format]: :_directories' \
+	'--forget[Discard receipt data for the specified package]: :__pkglist' \
+	'--learn[Update --edit-pkg PKGID with actual metadata from PATH]: :_directories' \
+	'--expand[Expand the flat package PKG to DIR]: :_files: :_directories' \
+	'--flatten[Flatten the files at DIR as PKG]: :_directories: :_files' \
+	'--bom[Extract any Bom files from the pkg at PATH into /tmp]: :_directories' \
+	'--payload-files[List the paths archived within the (m)pkg at PATH]: :_directories'
+}
+
+_pkgutil ()
+{
+	_arguments -C \
+	'--help[Show this usage guide]' \
+	'(-v --verbose)'{-v,--verbose}'[Show contextual information and format for easy reading]' \
+	'(-f --force)'{-f,--force}'[Perform all operations without asking for confirmation]' \
+	'--volume[Perform all operations on the specified volume]: :_directories' \
+	'--edit-pkg[Adjust properties of package PKGID using --learn PATH]: :__pkglist' \
+	'--only-files[List only files (not directories) in --files listing]' \
+	'--only-dirs[List only directories (not files) in --files listing]' \
+	'--regexp[Try all PKGID arguments as regular expressions]' \
+	'(-)*: :__pkgcmds' && return
+}
+
+_pkgutil
