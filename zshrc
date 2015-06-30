@@ -52,6 +52,8 @@ plugins=(brew docker osx make git svn mercurial tmux colored-man zsh_reload)
 
 source $ZSH/oh-my-zsh.sh
 
+umask 022
+
 # Customize to your needs...
 alias rm='rm -i'
 alias mv='mv -i'
