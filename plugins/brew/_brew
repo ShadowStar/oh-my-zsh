@@ -96,7 +96,68 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  install|reinstall|audit|home|homepage|log|info|abv|uses|cat|deps|desc|edit|options|switch)
+  audit)
+    _arguments \
+      '--strict[run additional checks]' \
+      '--online[do additional online checks]' \
+      '*: :->forms' && return 0
+
+    _brew_all_formulae
+    _wanted formulae expl 'all formulae' compadd -a formulae ;;
+  cleanup)
+    _arguments \
+      '--force[remove out-of-date keg-only brews as well]' \
+      '--prune=-[remove all cache files older than <days>]' \
+      '-n[show what would br remove, but do not actually remove]' \
+      '-s[scrubs the cache, remove downloads]' \
+      '*: :->forms' && return 0
+
+    _brew_installed_formulae
+    _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
+  deps)
+    _arguments \
+      '--1[only show dependencies one level down]' \
+      '-n[show dependencies in topological order]' \
+      '--union[show the union dependencies]' \
+      '--tree[show dependencies as a tree]' \
+      '--skip-build[skip :build type dependencies]' \
+      '--skip-optional[skip :optional type dependencies]' \
+      '--installed[show dependencies for all installed formulae]:*: :->installed' \
+      '--all[show dependencies for all formulae]:*: :->all' \
+      '*: :->forms' && return 0
+
+      if [[ "$state" == forms ]]; then
+        _brew_all_formulae
+        _wanted formulae expl 'all formulae' compadd -a formulae
+      fi ;;
+  fetch)
+    _arguments \
+      '-v[do a verbose VCS checkout]' \
+      '--force[remove a previously cached version and re-fetch]' \
+      '--deps[also download dependencies formulae]' \
+      '--build-from-source[download the source rather than a bottle]' \
+      '--force-bottle[download a bottle if it exist]' \
+      '*: :->forms' && return 0
+
+    _brew_all_formulae
+    _wanted formulae expl 'all formulae' compadd -a formulae ;;
+  install|reinstall)
+    _arguments \
+      '--debug[open an interactive debugging session if brewing fails]' \
+      '--ignore-dependencies[skip install dependencies]' \
+      '--only-dependencies[install dependencies only]' \
+      '--build-from-source[compile from source rather than install a bottle]' \
+      '--force-bottle[install from a bottle if it exist]' \
+      '--interactive[open a shell after download and patch]:*: :->inter' \
+      '*: :->forms' && return 0
+    if [[ "$state" == inter ]]; then
+      _arguments \
+        '--git[create a Git repository, useful for creating patches]' \
+	'*: :->form' && return 0
+    fi
+    _brew_all_formulae
+    _wanted formulae expl 'all formulae' compadd -a formulae ;;
+  home|homepage|log|info|abv|cat|desc|edit|options|switch)
     _brew_all_formulae
     _wanted formulae expl 'all formulae' compadd -a formulae ;;
   list|ls)
@@ -110,7 +171,7 @@ case "$words[1]" in
         _brew_installed_formulae
         _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae
       fi ;;
-  remove|rm|uninstall|unlink|cleanup|link|ln|pin|unpin)
+  remove|rm|uninstall|unlink|link|ln|pin|unpin)
     _brew_installed_formulae
     _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
   search|-S)
@@ -129,4 +190,19 @@ case "$words[1]" in
   upgrade)
     _brew_outdated_formulae
     _wanted outdated_formulae expl 'outdated formulae' compadd -a outdated_formulae ;;
+  uses)
+    _arguments \
+      '--recursive[resolve more than one level of dependencies]' \
+      '--skip-build[skip the :build type dependencies]' \
+      '--skip-optional[skip the :optional dependencies]' \
+      '--installed[only list installed formulae]:*:installed:->installed' \
+      '*: :->forms' && return 0
+
+      if [[ "$state" == installed ]]; then
+        _brew_installed_formulae
+        _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae
+      else
+        _brew_all_formulae
+        _wanted formulae expl 'all formulae' compadd -a formulae
+      fi ;;
 esac
