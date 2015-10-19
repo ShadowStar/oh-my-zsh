@@ -322,7 +322,7 @@ _git-branch () {
     "($c $m $d $e )*--list[list only branches matching glob]:pattern" \
     "($c $m    $e  -a)-r[list or delete only remote-tracking branches]" \
     "($c $m $d $e: -r)-a[list both remote-tracking branches and local branches]" \
-    "($c $m $d $e : -v -vv --verbose)"{-v,-vv--verbose}'[show SHA1 and commit subject line for each head]' \
+    "($c $m $d $e : -v -vv --verbose)"{-v,-vv,--verbose}'[show SHA1 and commit subject line for each head]' \
     "($c $m $d $e :)--abbrev=[set minimum SHA1 display-length]: :__git_guard_number length" \
     "($c $m $d $e :)--no-abbrev[do not abbreviate sha1s]" \
     "($l $m $d $e)-l[create the branch's reflog]" \
