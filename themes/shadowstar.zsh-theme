@@ -14,7 +14,7 @@ ZSH_THEME_GIT_SUFFIX="${yellow}|"
 ZSH_THEME_GIT_PROMPT_PREFIX="${magenta}"
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY=" ${red}✗"
-ZSH_THEME_GIT_PROMPT_CLEAN=" ${green}✔"
+ZSH_THEME_GIT_PROMPT_CLEAN=" ${green}✓"
 
 ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE="${green}="
 ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="${green}+"
@@ -22,7 +22,7 @@ ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="${yellow}-"
 ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="${red}≠"
 
 ZSH_THEME_LAST_CMD_FAILED="${red}✗"
-ZSH_THEME_LAST_CMD_SUCCESS="${green}✔"
+ZSH_THEME_LAST_CMD_SUCCESS="${green}✓"
 
 function git_info() {
 	local git_info="$(git_prompt_info)"
@@ -34,4 +34,3 @@ function git_info() {
 }
 
 PROMPT='$(last_cmd_info)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
-
