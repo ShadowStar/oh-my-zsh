@@ -21,8 +21,8 @@ ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="${green}+"
 ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="${yellow}-"
 ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="${red}≠"
 
-ZSH_THEME_LAST_CMD_FAILED="${red}✗"
-ZSH_THEME_LAST_CMD_SUCCESS="${green}✓"
+ZSH_THEME_LAST_CMD_FAILED="${red}✘"
+ZSH_THEME_LAST_CMD_SUCCESS="${green}✔︎"
 
 function git_info() {
 	local git_info="$(git_prompt_info)"
