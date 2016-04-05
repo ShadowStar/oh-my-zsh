@@ -77,6 +77,9 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 		if [[ -n $(brew list gettext) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
 		fi
+		if [[ -n $(brew list polipo) ]]; then
+			alias hp='http_proxy=http://localhost:8123'
+		fi
 	fi
 	if [[ -x $(which boot2docker) ]]; then
 		eval $(boot2docker shellinit 2>/dev/null)
