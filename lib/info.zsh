@@ -21,3 +21,9 @@ function last_cmd_info() {
 		echo ${ZSH_THEME_LAST_CMD_FAILED}
 	fi
 }
+
+function in_vim_shell() {
+	if [[ -n "$VIM" ]]; then
+		echo ${ZSH_THEME_IN_VIM_SHELL}
+	fi
+}

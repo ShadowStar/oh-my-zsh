@@ -24,6 +24,8 @@ ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="${red}≠"
 ZSH_THEME_LAST_CMD_FAILED="${red}✗"
 ZSH_THEME_LAST_CMD_SUCCESS="${green}✓"
 
+ZSH_THEME_IN_VIM_SHELL="(vim)"
+
 function git_info() {
 	local git_info="$(git_prompt_info)"
 	if [[ -n $git_info ]]; then
@@ -33,4 +35,4 @@ function git_info() {
 	echo -n "$git_info"
 }
 
-PROMPT='$(last_cmd_info)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
+PROMPT='$(last_cmd_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
