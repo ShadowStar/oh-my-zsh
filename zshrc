@@ -65,7 +65,7 @@ alias grep="grep --exclude 'tags' --exclude 'cscope.*' --binary-files=without-ma
 export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
 if [[ "`uname -s`" = "Darwin" ]]; then
-	PATH=$PATH:/opt/bin
+	PATH=$PATH:/opt/bin:/opt/my_scripts
 	if [[ -n ${CTPATH} ]]; then
 		PATH=$PATH:$CTPATH
 	fi
