@@ -69,7 +69,7 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	if [[ -n ${CTPATH} ]]; then
 		PATH=$PATH:$CTPATH
 	fi
-	GNUPATH=$(echo /usr/local/Cellar/*/*/libexec/gnubin | tr ' ' ':')
+	GNUPATH=$(echo /usr/local/opt/*/libexec/gnubin | tr ' ' ':')
 	if [[ -x $(which brew) ]]; then
 		if [[ -n $(brew list gnu-getopt) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gnu-getopt)/bin
