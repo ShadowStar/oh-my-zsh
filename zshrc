@@ -53,6 +53,27 @@ plugins=(brew docker osx make git svn mercurial colored-man-pages zsh_reload z)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt LIST_AMBIGUOUS
+setopt MENU_COMPLETE
+setopt BASH_AUTO_LIST
+setopt NO_NOMATCH
+
+#export LSCOLORS=Exfxcxdxbxegedabagacad
+unset LSCOLORS
+unsetopt AUTO_CD
+unsetopt COMPLETE_IN_WORD
+unsetopt CORRECT_ALL
+unsetopt SHARE_HISTORY
+
+export LANG="zh_CN.UTF-8"
+export LC_ALL="zh_CN.UTF-8"
+#export TERM=xterm-color
+
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
@@ -97,30 +118,9 @@ elif [[ "`uname -s`" = "Linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
 
-export LANG="zh_CN.UTF-8"
-export LC_ALL="zh_CN.UTF-8"
-#export TERM=xterm-color
-
 if $(which vimpager >/dev/null 2>&1); then
 	export PAGER="$(which vimpager)"
 fi
-
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt AUTO_LIST
-setopt AUTO_MENU
-setopt LIST_AMBIGUOUS
-setopt MENU_COMPLETE
-setopt BASH_AUTO_LIST
-setopt NO_NOMATCH
-
-#export LSCOLORS=Exfxcxdxbxegedabagacad
-unset LSCOLORS
-unsetopt AUTO_CD
-unsetopt COMPLETE_IN_WORD
-unsetopt CORRECT_ALL
-unsetopt SHARE_HISTORY
 
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 	source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
