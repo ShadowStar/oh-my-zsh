@@ -113,6 +113,7 @@ setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
 setopt MENU_COMPLETE
 setopt BASH_AUTO_LIST
+setopt NO_NOMATCH
 
 #export LSCOLORS=Exfxcxdxbxegedabagacad
 unset LSCOLORS
