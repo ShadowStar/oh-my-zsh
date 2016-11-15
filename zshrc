@@ -70,8 +70,10 @@ unsetopt COMPLETE_IN_WORD
 unsetopt CORRECT_ALL
 unsetopt SHARE_HISTORY
 
-export LANG="zh_CN.UTF-8"
-export LC_ALL="zh_CN.UTF-8"
+if [ -d /usr/share/locale/zh_CN.UTF-8 ]; then
+	export LANG="zh_CN.UTF-8"
+	export LC_ALL="zh_CN.UTF-8"
+fi
 #export TERM=xterm-color
 
 alias rm='rm -i'
