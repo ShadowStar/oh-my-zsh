@@ -25,6 +25,7 @@ ZSH_THEME_LAST_CMD_FAILED="${red}✗"
 ZSH_THEME_LAST_CMD_SUCCESS="${green}✓"
 
 ZSH_THEME_IN_VIM_SHELL="(vim)"
+ZSH_THEME_IN_DOCKER="${yellow}[${blue}D${yellow}]"
 
 function git_info() {
 	local git_info="$(git_prompt_info)"
@@ -35,4 +36,4 @@ function git_info() {
 	echo -n "$git_info"
 }
 
-PROMPT='$(last_cmd_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
+PROMPT='$(docker_info)$(last_cmd_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '

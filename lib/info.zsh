@@ -27,3 +27,9 @@ function in_vim_shell() {
 		echo ${ZSH_THEME_IN_VIM_SHELL}
 	fi
 }
+
+function docker_info() {
+	if [[ $OSTYPE =~ "linux" && -n $(sed 's,.*\/$,,' /proc/1/cgroup) ]]; then
+		echo "${ZSH_THEME_IN_DOCKER} "
+	fi
+}
