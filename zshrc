@@ -50,6 +50,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(brew docker docker-machine osx make git svn mercurial colored-man-pages zsh_reload z)
 
+if [ -z $OSTYPE ]; then
+	export OSTYPE=$(uname | tr [[:upper:]] [[:lower:]])
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
@@ -87,7 +91,7 @@ alias grep="grep --exclude 'tags' --exclude 'cscope.*' --binary-files=without-ma
 
 export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
-if [[ "`uname -s`" = "Darwin" ]]; then
+if [[ $OSTYPE =~ "darwin" ]]; then
 	PATH=$PATH:/opt/bin:/opt/my_scripts
 	if [[ -n ${CTPATH} ]]; then
 		PATH=$PATH:$CTPATH
@@ -116,7 +120,7 @@ if [[ "`uname -s`" = "Darwin" ]]; then
 	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
 	alias ls="ls -G -F"
 	alias GetBTMMAddr="echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'"
-elif [[ "`uname -s`" = "Linux" ]]; then
+elif [[ $OSTYPE =~ "linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
 
