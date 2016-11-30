@@ -77,6 +77,9 @@ unsetopt SHARE_HISTORY
 if [ -d /usr/share/locale/zh_CN.UTF-8 ]; then
 	export LANG="zh_CN.UTF-8"
 	export LC_ALL="zh_CN.UTF-8"
+else
+	export LANG="en_US.UTF-8"
+	export LC_ALL="en_US.UTF-8"
 fi
 #export TERM=xterm-color
 
