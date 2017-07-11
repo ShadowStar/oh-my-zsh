@@ -36,4 +36,4 @@ function git_info() {
 	echo -n "$git_info"
 }
 
-PROMPT='%T $(last_cmd_info)$(docker_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
+PROMPT='%D{%H:%M} $(last_cmd_info)$(docker_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info) ${cyan}%#${reset} '
