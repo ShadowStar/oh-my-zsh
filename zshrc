@@ -102,7 +102,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 		PATH=$PATH:$CTPATH
 	fi
 	GNUPATH=$(echo /usr/local/opt/*/libexec/gnubin | tr ' ' ':')
-	if [[ -x $(which brew) ]]; then
+	if command -v brew >/dev/null; then
 		if [[ -n $(brew list gnu-getopt) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gnu-getopt)/bin
 		fi
@@ -113,7 +113,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 			alias hp='http_proxy=http://localhost:8123'
 		fi
 	fi
-	if [[ -x $(which boot2docker) ]]; then
+	if command -v boot2docker >/dev/null; then
 		eval $(boot2docker shellinit 2>/dev/null)
 	fi
 	export PATH
@@ -129,8 +129,12 @@ elif [[ $OSTYPE =~ "linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
 
-if $(which vimpager >/dev/null 2>&1); then
-	export PAGER="$(which vimpager)"
+if command -v vimpager >/dev/null; then
+	export PAGER="vimpager"
+fi
+
+if command -v vim >/dev/null; then
+	alias vi="vim"
 fi
 
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
