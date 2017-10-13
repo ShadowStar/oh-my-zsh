@@ -1,8 +1,8 @@
-alias brews='brew list -1'
+alias brews='brew list -1 | sort'
 alias bubo='brew update && brew outdated'
 alias bubc='brew upgrade && brew cleanup'
 alias bubu='bubo && bubc'
-alias brewl='brew leaves'
+alias brewl='brew leaves | sort'
 export HOMEBREW_BUILD_FROM_SOURCE=1
 export HOMEBREW_NO_ANALYTICS=1
 
