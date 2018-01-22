@@ -131,6 +131,10 @@ if command -v vim >/dev/null; then
 	alias vi="vim"
 fi
 
+if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+	source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 	source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
