@@ -53,6 +53,7 @@ _git-vergen () {
 		'(-r --release)'{-r,--release}'[add release tag, like beta, etc]: :(-alpha -beta -rc -release)' \
 		'(-f --full)'{-f,--full}'[show full message]' \
 		'(-n --now)'{-n,--now}'[use current user & time instead of commit'\''s]' \
+		'(-c --commit)'{-c,--commit}'[show commit id]' \
 		'(-d --dir)'{-d,--dir}'[specify work tree instead of \$(pwd)]: :_directories'
 }
 
