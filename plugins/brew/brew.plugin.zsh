@@ -6,6 +6,7 @@ alias bubc='brew upgrade && brew cleanup'
 alias bubu='bubo && bubc'
 alias brewl='brew leaves | sort'
 export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_AUTO_UPDATE_SECS=3600
 
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
 	print -P '%F{yellow}'Oh My Zsh brew plugin:
