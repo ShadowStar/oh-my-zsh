@@ -16,7 +16,7 @@ __git_all_branches () {
 	local dir=$words[2]
 	declare -a all_branch_names
 
-	if [ "$dir" == "*.git" ]; then
+	if [[ "$dir" == *.git ]]; then
 		git_dir=${dir}
 	else
 		git_dir=${dir}/.git
