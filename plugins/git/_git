@@ -1805,6 +1805,7 @@ _git-submodule () {
   declare -A opt_args
 
   _arguments -C \
+    '(-h --help)'{-h,--help}'[display help message]' \
     '(-q --quiet)'{-q,--quiet}'[suppress all output]' \
     ': :->command' \
     '*:: :->option-or-argument' && ret=0
@@ -2722,12 +2723,12 @@ __git_config_option-or-value () {
     'svn-remote.*.noMetadata:disable git-svn-id: lines at end of commits::->bool:false'
     'svn-remote.*.useSvmProps:use remappings of URLs and UUIDs from mirrors::->bool:false'
     'svn-remote.*.useSvnsyncProps:use remappings of URLs and UUIDs for the svnsync command::->bool:false'
-    'svn-remote.*.rewriteRoot:alternate root URL to use:root url:_urls'
+    'svn-remote.*.rewriteRoot:alternate root URL to use:root url:_git_svn_urls'
     'svn-remote.*.rewriteUUID:remap URLs and UUIDs for mirrors manually::->bool:false'
     'svn-remote.*.ignore-paths:regular expression of paths to not check out:regular expression:->string'
-    'svn-remote.*.url:URL to connect to::_urls'
+    'svn-remote.*.url:URL to connect to::_git_svn_urls'
     'svn-remote.*.fetch:fetch specification::__git_ref_specs_fetchy' # ### undocumented
-    'svn-remote.*.pushurl:URL to push to::_urls'
+    'svn-remote.*.pushurl:URL to push to::_git_svn_urls'
     'svn-remote.*.branches:branch mappings:branch mapping:->string'
     'svn-remote.*.tags:tag mappings:tag mapping:->string'
     tag.sort:'default sorting method:sorting method:->string'
@@ -4190,7 +4191,7 @@ _git-request-pull () {
   _arguments -S \
     '-p[display patch text]' \
     ':start commit:__git_commits' \
-    ': :_urls' \
+    ': :_git_urls' \
     '::end commit:__git_commits'
 }
 
@@ -4342,7 +4343,7 @@ _git-svn () {
 	    '(-b --branches)*'{-b-,--branches=}'[add branches sub-directory]:branches sub-directory:->subdirectory'
 	    '(-s --stdlayout)'{-s,--stdlayout}'[shorthand for setting trunk, tags, branches as relative paths, the SVN default]'
 	    '--no-metadata[get rid of git-svn-id: lines at the end of every commit]'
-	    '--rewrite-root=[set svn-remote.*.rewriteRoot]:new root:_urls'
+	    '--rewrite-root=[set svn-remote.*.rewriteRoot]:new root:_git_svn_urls'
 	    '--rewrite-uuid=[set svn-remote.*.rewriteUUID]:uuid'
 	    '--prefix=[prefix to use for names of remotes]:path prefix:_directories -r ""'
 	    '(               --no-minimize-url)--minimize-url[minimize URLs]'
@@ -4399,7 +4400,7 @@ _git-svn () {
             '(-m --message)'{-m,--message}'[specify the commit message]:message'
             '(-d --destination)'{-d,--destination}"[location of $line[1] to create in SVN repository]: :_directories"
             '--username[specify SVN username to perform commit as]: :_users'
-            '--commit-url[specify URL to connect to destination SVN repository]: :_urls'
+            '--commit-url[specify URL to connect to destination SVN repository]: :_git_svn_urls'
 	    '--parents[create parent folders]'
 	  )
 	;|
@@ -4427,7 +4428,7 @@ _git-svn () {
           opts+=(
 	    '--preserve-empty-dirs[create a placeholder file for each empty directory]'
 	    '--placeholder-filename=[specify name of placeholder files created by --preserve-empty-dirs]:filename [.gitignore]:_files'
-            ':url:_urls'
+            ':url:_git_svn_urls'
             '::directory:_directories'
 	  )
 	;;
@@ -4439,7 +4440,7 @@ _git-svn () {
             '(-F --file)'{-F-,--file=}':file:_files'
 	    ':original tree:__git_tree_ishs'
 	    ':new tree result:__git_tree_ishs'
-	    ':target:_urls'
+	    ':target:_git_svn_urls'
 	  )
 	;;
         (dcommit)
@@ -4464,7 +4465,7 @@ _git-svn () {
 	  )
 	;;
         (init)
-	  opts+=( ':SVN URL:_urls' ':target directory:_directories' )
+	  opts+=( ':SVN URL:_git_svn_urls' ':target directory:_directories' )
         ;;
 	(find-rev)
 	  opts+=(
@@ -4534,7 +4535,7 @@ _git-svn () {
         (subdirectory)
           _alternative \
             'sub-directories:sub-directory:_directories' \
-            'urls: :_urls' && ret=0
+            'urls: :_git_svn_urls' && ret=0
           ;;
       esac
       ;;
@@ -6975,6 +6976,45 @@ __git_tree_files () {
 
 # Repository Argument Types
 
+(( $+functions[_git_urls] )) ||
+_git_urls () {
+  if compset -P 'file:///'
+  then
+    _path_files -/ -W /
+  elif compset -P '*@'
+  then
+    __git_remote_repositories
+  elif compset -P '*://'
+  then
+    _users -S@
+    __git_remote_repositories
+  else
+    local expl
+    compset -S '[^:]*'
+    _wanted url-schemas expl 'URL schema' compadd -S '' - \
+      ftp:// ftps:// rsync:// \
+      http:// https:// ssh:// git:// file:/// git@
+    _wanted users expl 'user to log in as' _users -S@
+  fi
+}
+
+(( $+functions[_git_svn_urls] )) ||
+_git_svn_urls () {
+  if compset -P 'file:///'
+  then
+    _path_files -/ -W /
+  elif compset -P '*://'
+  then
+    _users -S@
+    __git_remote_repositories
+  else
+    local expl
+    compset -S '[^:]*'
+    _wanted url-schemas expl 'SVN URL' compadd -S '' - \
+      http:// https:// svn:// file:///
+  fi
+}
+
 (( $+functions[__git_remote_repositories] )) ||
 __git_remote_repositories () {
   if compset -P '*:'; then
@@ -6988,7 +7028,7 @@ __git_remote_repositories () {
 __git_repositories () {
   _alternative \
     'local-repositories::__git_local_repositories' \
-    'remote-repositories::__git_remote_repositories'
+    'remote-repositories::_git_urls'
 }
 
 (( $+functions[__git_local_repositories] )) ||
@@ -7002,7 +7042,7 @@ __git_local_repositories () {
 __git_repositories_or_urls () {
   _alternative \
     'repositories::__git_repositories' \
-    'urls::_urls'
+    'urls::_git_urls'
 }
 
 (( $+functions[__git_current_remote_urls] )) ||
@@ -7019,7 +7059,7 @@ __git_any_repositories () {
   _alternative \
     'local-repositories::__git_local_repositories' \
     'remotes: :__git_remotes' \
-    'remote-repositories::__git_remote_repositories'
+    'remote-repositories::_git_urls'
 }
 
 (( $+functions[__git_any_repositories_or_references] )) ||
