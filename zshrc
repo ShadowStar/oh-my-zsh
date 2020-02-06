@@ -109,6 +109,9 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 		if [[ -n $(brew list gettext) ]]; then
 			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
 		fi
+		if [[ -n $(brew list bison) ]]; then
+			GNUPATH=$GNUPATH:$(brew --prefix bison)/bin
+		fi
 	fi
 	export PATH
 	export GNUPATH
