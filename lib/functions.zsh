@@ -223,3 +223,14 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+function rename() {
+  if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+    command mv "$@"
+    return
+  fi
+
+  newfilename="$1"
+  vared newfilename
+  command mv -v -- "$1" "$newfilename"
+}
