@@ -115,6 +115,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 	fi
 	export PATH
 	export GNUPATH
+	alias open="open -n"
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
 	alias pkgfinfo="pkgutil -v --file-info"
