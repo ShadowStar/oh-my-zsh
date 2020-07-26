@@ -56,7 +56,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(brew docker docker-machine osx make git git-shadowstar svn mercurial colored-man-pages themes web-search zsh_reload z)
+plugins=(brew docker docker-machine osx make git git-shadowstar svn mercurial colored-man-pages themes web-search zsh_reload z zsh-prompt-benchmark)
 
 if [ -z $OSTYPE ]; then
 	export OSTYPE=$(uname | tr [[:upper:]] [[:lower:]])
