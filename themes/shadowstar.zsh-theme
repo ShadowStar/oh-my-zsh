@@ -29,13 +29,30 @@ ZSH_THEME_LAST_CMD_SUCCESS="${green}✓"
 ZSH_THEME_IN_VIM_SHELL="(V)"
 ZSH_THEME_IN_DOCKER="${yellow}[${blue}D${yellow}]"
 
-source $ZSH/custom/themes/powerlevel10k/gitstatus/gitstatus.prompt.zsh
+if command -v brew >/dev/null; then
+	local gpath=$(brew --prefix gitstatus)
+	if [[ ! -d ${gpath} ]]; then
+		gpath=$(brew --prefix powerlevel10k)/gitstatus
+	fi
+	if [[ -d ${gpath} ]]; then
+		source ${gpath}/gitstatus.prompt.zsh
+	fi
+fi
+
 function git_info() {
 	local git_info="${GITSTATUS_PROMPT}"
 	if [[ -n $git_info ]]; then
 		git_info=$ZSH_THEME_GIT_PREFIX$git_info$ZSH_THEME_GIT_SUFFIX
+		echo -n "$git_info"
+		return
 	fi
-	echo -n "$git_info"
+	git_info="$(git_prompt_info)"
+	if [[ -n $git_info ]]; then
+		git_info=$ZSH_THEME_GIT_PREFIX$git_info
+		git_info+="$(git_remote_status)"$ZSH_THEME_GIT_SUFFIX
+		echo -n "$git_info"
+		return
+	fi
 }
 
 PROMPT='
