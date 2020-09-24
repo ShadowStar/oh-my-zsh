@@ -111,14 +111,18 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 	fi
 	GNUPATH=$(echo /usr/local/opt/*/libexec/gnubin | tr ' ' ':')
 	if command -v brew >/dev/null; then
-		if [[ -n $(brew list gnu-getopt) ]]; then
-			GNUPATH=$GNUPATH:$(brew --prefix gnu-getopt)/bin
+		local bpath
+		bpath=$(brew --prefix gnu-getopt)
+		if [[ -d "${bpath}" ]]; then
+			GNUPATH=$GNUPATH:"${bpath}"/bin
 		fi
-		if [[ -n $(brew list gettext) ]]; then
-			GNUPATH=$GNUPATH:$(brew --prefix gettext)/bin
+		bpath=$(brew --prefix gettext)
+		if [[ -d "${bpath}" ]]; then
+			GNUPATH=$GNUPATH:"${bpath}"/bin
 		fi
-		if [[ -n $(brew list bison) ]]; then
-			GNUPATH=$GNUPATH:$(brew --prefix bison)/bin
+		bpath=$(brew --prefix bison)
+		if [[ -d "${bpath}" ]]; then
+			GNUPATH=$GNUPATH:"${bpath}"/bin
 		fi
 	fi
 	export PATH
