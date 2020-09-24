@@ -124,6 +124,10 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 		if [[ -d "${bpath}" ]]; then
 			GNUPATH=$GNUPATH:"${bpath}"/bin
 		fi
+		bpath=$(brew --prefix powerlevel10k)
+		if [[ -d "${bpath}" && $ZSH_THEME == "powerlevel10k/powerlevel10k" ]]; then
+			source "${bpath}"/powerlevel10k.zsh-theme
+		fi
 	fi
 	export PATH
 	export GNUPATH
