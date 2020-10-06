@@ -39,14 +39,33 @@ if command -v brew >/dev/null; then
 	fi
 fi
 
+function not_git_dir() {
+	local __p=$(realpath .)
+	while [[ "${__p}" != "/" ]]; do
+		if [[ -e "${__p}/.git" ]]; then
+			return -1
+		else
+			__p=$(dirname "${__p}")
+		fi
+	done
+	return 0
+}
+
 function git_info() {
-	local git_info="${GITSTATUS_PROMPT}"
+	local git_info
+	if not_git_dir; then
+		return
+	else
+		git_info="${GITSTATUS_PROMPT}"
+	fi
+
 	if [[ -n $git_info ]]; then
 		git_info=$ZSH_THEME_GIT_PREFIX$git_info$ZSH_THEME_GIT_SUFFIX
 		echo -n "$git_info"
 		return
+	else
+		git_info="$(git_prompt_info)"
 	fi
-	git_info="$(git_prompt_info)"
 	if [[ -n $git_info ]]; then
 		git_info=$ZSH_THEME_GIT_PREFIX$git_info
 		git_info+="$(git_remote_status)"$ZSH_THEME_GIT_SUFFIX
