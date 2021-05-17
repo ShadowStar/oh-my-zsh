@@ -147,7 +147,7 @@ if command -v vimpager >/dev/null; then
 fi
 
 if command -v vim >/dev/null; then
-	alias vi="vim"
+	alias vi="vim -O"
 fi
 
 if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
