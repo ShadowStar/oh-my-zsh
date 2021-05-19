@@ -138,6 +138,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
 	alias ls="ls -G -F"
 	alias GetBTMMAddr="echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'"
+	export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;
 elif [[ $OSTYPE =~ "linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
