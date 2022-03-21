@@ -33,3 +33,10 @@ function docker_info() {
 		echo "${ZSH_THEME_IN_DOCKER} "
 	fi
 }
+
+function linux_dist() {
+	if [[ $OSTYPE =~ "linux" && -e /etc/system-release ]]; then
+		echo "`cat /etc/system-release | cut -d' ' -f1` "
+	fi
+}
+
