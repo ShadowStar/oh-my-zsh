@@ -75,5 +75,5 @@ function git_info() {
 }
 
 PROMPT='
-%D{%H:%M} $(last_cmd_info)$(docker_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)${blue}%c$(git_info)
+%D{%H:%M} $(last_cmd_info)$(docker_info)$(in_vim_shell)${yellow}|${cyan}$(user_info)${green}$(remote_info)%{$fg_bold[magenta]%}$(linux_dist)${blue}%c$(git_info)
 ${green}❯${reset} '
