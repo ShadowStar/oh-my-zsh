@@ -29,7 +29,7 @@ function in_vim_shell() {
 }
 
 function docker_info() {
-	if [[ $OSTYPE =~ "linux" && -n $(sed 's,.*\/$,,' /proc/1/cgroup) ]]; then
+	if [[ $OSTYPE =~ "linux" && -n $(grep 'docker\|lxc' /proc/1/cgroup) ]]; then
 		echo "${ZSH_THEME_IN_DOCKER} "
 	fi
 }
