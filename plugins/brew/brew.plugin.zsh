@@ -40,7 +40,7 @@ export HOMEBREW_AUTO_UPDATE_SECS=3600
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
-  local casks="$(brew list --cask)"
+  local casks="$(brew list --cask 2>/dev/null)"
 
   local blue="$(tput setaf 4)"
   local bold="$(tput bold)"
