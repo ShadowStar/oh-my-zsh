@@ -27,12 +27,15 @@ fi
 
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
+alias bcubc='brew upgrade --cask && brew cleanup'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
 alias bubc='brew upgrade --greedy && brew cleanup'
 alias bubo='brew update && brew outdated --greedy'
 alias bubu='bubo && bubc'
+alias bubug='bubo && bugbc'
 alias buf='brew upgrade --formula'
+alias buz='brew uninstall --zap'
 
 alias brewl='brew leaves | sort'
 export HOMEBREW_NO_ANALYTICS=1
