@@ -34,7 +34,7 @@ alias bubc='brew upgrade --greedy && brew cleanup'
 alias bubo='brew update && brew outdated --greedy'
 alias bubu='bubo && bubc'
 alias bubug='bubo && bugbc'
-alias buf='brew upgrade --formula'
+alias bfu='brew upgrade --formula'
 alias buz='brew uninstall --zap'
 
 alias brewl='brew leaves | sort'
