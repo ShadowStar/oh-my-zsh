@@ -75,8 +75,6 @@ setopt MENU_COMPLETE
 setopt BASH_AUTO_LIST
 setopt NO_NOMATCH
 
-#export LSCOLORS=Exfxcxdxbxegedabagacad
-unset LSCOLORS
 unsetopt AUTO_CD
 unsetopt COMPLETE_IN_WORD
 unsetopt CORRECT_ALL
