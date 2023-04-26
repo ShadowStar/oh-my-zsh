@@ -136,7 +136,11 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
 	alias ls="ls -G -F"
 	alias GetBTMMAddr="echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'"
-	export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;
+	if $(netstat -adnW -f inet|grep -q 8001); then
+		export http_proxy="http://127.0.0.1:8001"; export HTTP_PROXY="http://127.0.0.1:8001"; export https_proxy="http://127.0.0.1:8001"; export HTTPS_PROXY="http://127.0.0.1:8001";
+	elif $(netstat -adnW -f inet|grep -q 1087); then
+		export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;
+	fi
 elif [[ $OSTYPE =~ "linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
