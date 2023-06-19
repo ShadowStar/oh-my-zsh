@@ -101,6 +101,7 @@ alias lh="ls -lh"
 alias grep="grep -n --exclude 'tags' --exclude 'cscope.*' --binary-files=without-match --color=auto"
 alias wakepc="wakeonlan e0:d5:5e:0e:44:14"
 alias wakenas="wakeonlan 00:11:32:7b:cd:b9"
+alias wakelenove="wakeonlan e8:80:88:20:9c:f1"
 
 export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
 
