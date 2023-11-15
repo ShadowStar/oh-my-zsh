@@ -104,13 +104,17 @@ alias wakenas="wakeonlan 00:11:32:7b:cd:b9"
 alias wakelenove="wakeonlan e8:80:88:20:9c:f1"
 
 export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
+export LPATH=/usr/local
 
 if [[ $OSTYPE =~ "darwin" ]]; then
 	PATH=$PATH:/opt/bin:/opt/my_scripts
+	if [[ -f /opt/homebrew/bin/brew ]]; then
+		LPATH=$(/opt/homebrew/bin/brew --prefix)
+	fi
 	if [[ -n ${CTPATH} ]]; then
 		PATH=$PATH:$CTPATH
 	fi
-	GNUPATH=$(echo /usr/local/opt/*/libexec/gnubin | tr ' ' ':')
+	GNUPATH=$(echo ${LPATH}/opt/*/libexec/gnubin | tr ' ' ':')
 	if command -v brew >/dev/null; then
 		local bpath
 		bpath=$(brew --prefix gnu-getopt)
@@ -156,12 +160,12 @@ if command -v vim >/dev/null; then
 	alias vi="vim -O"
 fi
 
-if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-	source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ -f ${LPATH}/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+	source ${LPATH}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-	source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f ${LPATH}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+	source ${LPATH}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
