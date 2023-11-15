@@ -108,14 +108,10 @@ export LPATH=/usr/local
 
 if [[ $OSTYPE =~ "darwin" ]]; then
 	PATH=$PATH:/opt/bin:/opt/my_scripts
-	if [[ -f /opt/homebrew/bin/brew ]]; then
-		LPATH=$(/opt/homebrew/bin/brew --prefix)
-	fi
-	if [[ -n ${CTPATH} ]]; then
-		PATH=$PATH:$CTPATH
-	fi
-	GNUPATH=$(echo ${LPATH}/opt/*/libexec/gnubin | tr ' ' ':')
-	if command -v brew >/dev/null; then
+	if type brew &>/dev/null
+	then
+		LPATH=$(brew --prefix)
+		GNUPATH=$(echo ${LPATH}/opt/*/libexec/gnubin | tr ' ' ':')
 		local bpath
 		bpath=$(brew --prefix gnu-getopt)
 		if [[ -d "${bpath}" ]]; then
@@ -140,7 +136,6 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 		autoload -Uz compinit
 		compinit
 	fi
-	export PATH
 	export GNUPATH
 	alias pkginfo="pkgutil -v --pkg-info"
 	alias pkgf="pkgutil -v --files"
@@ -157,6 +152,11 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 elif [[ $OSTYPE =~ "linux" ]]; then
 	alias ls="ls --color=auto -F"
 fi
+
+if [[ -n ${CTPATH} ]]; then
+	PATH=$PATH:$CTPATH
+fi
+export PATH
 
 if command -v vimpager >/dev/null; then
 	export PAGER="vimpager"
