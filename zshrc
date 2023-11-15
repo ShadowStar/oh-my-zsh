@@ -134,6 +134,12 @@ if [[ $OSTYPE =~ "darwin" ]]; then
 			source "${bpath}"/powerlevel10k.zsh-theme
 		fi
 	fi
+	if [[ -d ${LPATH}/share/zsh/site-functions ]]; then
+		FPATH="${LPATH}/share/zsh/site-functions:${FPATH}"
+
+		autoload -Uz compinit
+		compinit
+	fi
 	export PATH
 	export GNUPATH
 	alias pkginfo="pkgutil -v --pkg-info"
