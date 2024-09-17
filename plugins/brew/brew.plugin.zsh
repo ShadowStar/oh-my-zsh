@@ -49,7 +49,7 @@ alias buz='brew uninstall --zap'
 alias brewl='brew leaves | sort'
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_AUTO_UPDATE_SECS=3600
-export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+#export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
