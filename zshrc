@@ -158,6 +158,10 @@ if [[ -n ${CTPATH} ]]; then
 fi
 export PATH
 
+if command -v fzf >/dev/null; then
+	eval "$(fzf --zsh)"
+fi
+
 if command -v vimpager >/dev/null; then
 	export PAGER="vimpager"
 fi
