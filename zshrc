@@ -53,6 +53,9 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # DISABLE_SUBMODULE_DIRTY="true"
 
+ZDOTDIR=$HOME/.cache/
+ZSHZ_DATA=$HOME/.cache/z
+HISTFILE=$HOME/.cache/zsh_history
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
