@@ -60,7 +60,7 @@ SHELL_SESSION_DIR=$HOME/.cache/zsh_sessions
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(brew docker docker-machine macos make git git-auto-fetch git-auto-push git-shadowstar svn mercurial colored-man-pages themes web-search z zsh-prompt-benchmark fzf per-directory-history)
+plugins=(brew docker macos make git git-auto-fetch git-auto-push git-shadowstar svn mercurial colored-man-pages themes web-search z zsh-prompt-benchmark fzf per-directory-history)
 
 if [ -z $OSTYPE ]; then
 	export OSTYPE=$(uname | tr [[:upper:]] [[:lower:]])
