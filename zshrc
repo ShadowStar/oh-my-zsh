@@ -53,136 +53,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # DISABLE_SUBMODULE_DIRTY="true"
 
-ZDOTDIR=$HOME/.cache/
-ZSHZ_DATA=$HOME/.cache/z
-HISTFILE=$HOME/.cache/zsh_history
-SHELL_SESSION_DIR=$HOME/.cache/zsh_sessions
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(brew docker macos make git git-auto-fetch git-auto-push git-shadowstar svn mercurial colored-man-pages themes web-search z zsh-prompt-benchmark fzf per-directory-history)
 
-if [ -z $OSTYPE ]; then
-	export OSTYPE=$(uname | tr [[:upper:]] [[:lower:]])
-fi
-
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt AUTO_LIST
-setopt AUTO_MENU
-setopt LIST_AMBIGUOUS
-setopt MENU_COMPLETE
-setopt BASH_AUTO_LIST
-setopt NO_NOMATCH
-
-unsetopt AUTO_CD
-unsetopt COMPLETE_IN_WORD
-unsetopt CORRECT_ALL
-unsetopt SHARE_HISTORY
-
-if $(locale -a 2>/dev/null | grep -q zh_CN.UTF-8); then
-	export LANG="zh_CN.UTF-8"
-	export LC_ALL="zh_CN.UTF-8"
-elif $(locale -a 2>/dev/null | grep -q en_US.UTF-8); then
-	export LANG="en_US.UTF-8"
-	export LC_ALL="en_US.UTF-8"
-else
-	export LANG="POSIX"
-	export LC_ALL="POSIX"
-fi
-
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i'
-alias la="ls -a"
-alias ll="ls -l"
-alias lla="ls -la"
-alias lh="ls -lh"
-alias grep="grep -n --exclude 'tags' --exclude 'cscope.*' --binary-files=without-match --color=auto"
-alias wakepc="wakeonlan e0:d5:5e:0e:44:14"
-alias wakenas="wakeonlan 00:11:32:7b:cd:b9"
-alias wakelenove="wakeonlan e8:80:88:20:9c:f1"
-
-ulimit -n 524288
-
-export CTPATH=$(echo /opt/*-tools/bin 2>/dev/null | tr ' ' ':')
-export LPATH=/usr/local
-
-if [[ $OSTYPE =~ "darwin" ]]; then
-	PATH=$PATH:/opt/bin:/opt/my_scripts
-	if type brew &>/dev/null
-	then
-		LPATH=$(brew --prefix)
-		GNUPATH=$(echo ${LPATH}/opt/*/libexec/gnubin | tr ' ' ':')
-		local bpath
-		bpath=$(brew --prefix gnu-getopt)
-		if [[ -d "${bpath}" ]]; then
-			GNUPATH=$GNUPATH:"${bpath}"/bin
-		fi
-		bpath=$(brew --prefix gettext)
-		if [[ -d "${bpath}" ]]; then
-			GNUPATH=$GNUPATH:"${bpath}"/bin
-		fi
-		bpath=$(brew --prefix bison)
-		if [[ -d "${bpath}" ]]; then
-			GNUPATH=$GNUPATH:"${bpath}"/bin
-		fi
-		bpath=$(brew --prefix powerlevel10k)
-		if [[ -d "${bpath}" && $ZSH_THEME == "powerlevel10k/powerlevel10k" ]]; then
-			source "${bpath}"/powerlevel10k.zsh-theme
-		fi
-	fi
-	if [[ -d ${LPATH}/share/zsh/site-functions ]]; then
-		FPATH="${LPATH}/share/zsh/site-functions:${FPATH}"
-
-		autoload -Uz compinit
-		compinit
-	fi
-	export GNUPATH
-	alias pkginfo="pkgutil -v --pkg-info"
-	alias pkgf="pkgutil -v --files"
-	alias pkgfinfo="pkgutil -v --file-info"
-	alias pkgs="pkgutil --pkgs"
-	alias pkgl="pkgutil --pkgs | grep -v \"^com\.apple\""
-	alias ls="ls -G -F"
-	alias GetBTMMAddr="echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'"
-	if $(netstat -adnW -f inet|grep -q 8001); then
-		export http_proxy="http://127.0.0.1:8001"; export HTTP_PROXY="http://127.0.0.1:8001"; export https_proxy="http://127.0.0.1:8001"; export HTTPS_PROXY="http://127.0.0.1:8001";
-	elif $(netstat -adnW -f inet|grep -q 1087); then
-		export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;
-	fi
-elif [[ $OSTYPE =~ "linux" ]]; then
-	alias ls="ls --color=auto -F"
-fi
-
-if [[ -n ${CTPATH} ]]; then
-	PATH=$PATH:$CTPATH
-fi
-export PATH
-
-if command -v fzf >/dev/null; then
-	eval "$(fzf --zsh)"
-fi
-
-if command -v vimpager >/dev/null; then
-	export PAGER="vimpager"
-fi
-
-if command -v vim >/dev/null; then
-	alias vi="vim -O"
-fi
-
-if [ -f ${LPATH}/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-	source ${LPATH}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
-
-if [ -f ${LPATH}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-	source ${LPATH}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 if [[ $ZSH_THEME == "powerlevel10k/powerlevel10k" ]]; then
